@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Quiz — Personalised Assessment | VedTrim</title>
+  <meta name="description" content="Take your comprehensive Ayurvedic health quiz. Our Vaidyas will use this to create your personalised weight loss plan.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🌿</div>Ved<span class="logo-highlight">Trim</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a><a href="dashboard.html">Dashboard</a>
+      </div>
+      <div class="nav-actions">
+        <a href="dashboard.html" class="btn btn-outline btn-sm">← Back to Dashboard</a>
+      </div>
+      <div class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <div class="quiz-page">
+    <div class="quiz-container">
+      <!-- Progress -->
+      <div class="quiz-progress">
+        <div class="quiz-progress-bar" id="progressBar" style="width: 2%;"></div>
+      </div>
+      <div class="quiz-progress-text" id="progressText">Section 1 of 15</div>
+
+      <!-- ===================== SECTION 1: START ===================== -->
+      <div class="quiz-section active" data-section="1">
+        <span class="quiz-section-tag">Section 1 — Start</span>
+        <h2>Let's Begin Your Journey 🌿</h2>
+
+        <div class="quiz-question">
+          <h3>What is your height? (cm)</h3>
+          <div class="form-group">
+            <input type="number" class="form-input" id="q_height" placeholder="e.g. 170" min="100" max="250">
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">Enter in centimetres</div>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What is your current weight? (kg)</h3>
+          <div class="form-group">
+            <input type="number" class="form-input" id="q_weight" placeholder="e.g. 80" min="30" max="300">
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">Enter in kilograms</div>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What is your goal weight? (kg)</h3>
+          <div class="form-group">
+            <input type="number" class="form-input" id="q_goalWeight" placeholder="e.g. 65" min="30" max="250">
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 2: PRELIMINARY ===================== -->
+      <div class="quiz-section" data-section="2">
+        <span class="quiz-section-tag">Section 2 — Preliminary</span>
+        <h2>About You</h2>
+
+        <div class="quiz-question">
+          <h3>Are you male or female?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_gender" value="male"> Male</label>
+            <label class="quiz-option"><input type="radio" name="q_gender" value="female"> Female</label>
+            <label class="quiz-option"><input type="radio" name="q_gender" value="other"> Prefer not to say</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you experience any of the following due to weight imbalance?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_symptoms" value="low_energy"> Low energy (Ojas kshaya)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_symptoms" value="hair_fall"> Hair fall (Kesh patana)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_symptoms" value="skin_problems"> Skin problems (Twacha vikara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_symptoms" value="low_desire"> Low desire (Shukra kshaya)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_symptoms" value="memory_issues"> Memory/concentration issues (Smriti daurbalya)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_symptoms" value="none"> None of these</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Which of these is your priority?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_priority" value="lose_weight"> Lose weight (Medohar)</label>
+            <label class="quiz-option"><input type="radio" name="q_priority" value="build_strength"> Build strength (Bala vardhan)</label>
+            <label class="quiz-option"><input type="radio" name="q_priority" value="maintain"> Maintain current body (Deha sthapana)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What is your primary reason for taking weight loss seriously?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_reason" value="energy"> I want to feel more energetic (Urja prapti)</label>
+            <label class="quiz-option"><input type="radio" name="q_reason" value="look_better"> I want to feel and look better (Roop sudhar)</label>
+            <label class="quiz-option"><input type="radio" name="q_reason" value="health"> I want to reduce my current health issues (Rog nivaran)</label>
+            <label class="quiz-option"><input type="radio" name="q_reason" value="all"> All of these</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 3: HEALTH ===================== -->
+      <div class="quiz-section" data-section="3">
+        <span class="quiz-section-tag">Section 3 — Health</span>
+        <h2>Your Health Profile</h2>
+
+        <div class="quiz-question">
+          <h3>How is your sleep (Nidra), overall?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_sleep" value="good"> Very good (Uttam nidra)</label>
+            <label class="quiz-option"><input type="radio" name="q_sleep" value="restless"> A little restless (Chanchala nidra)</label>
+            <label class="quiz-option"><input type="radio" name="q_sleep" value="poor"> I don't sleep well (Nidranash)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How many hours of sleep do you usually get each night?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_sleepHours" value="<5"> Less than 5 hours</label>
+            <label class="quiz-option"><input type="radio" name="q_sleepHours" value="5-6"> 5-6 hours</label>
+            <label class="quiz-option"><input type="radio" name="q_sleepHours" value="6-8"> 6-8 hours</label>
+            <label class="quiz-option"><input type="radio" name="q_sleepHours" value="9+"> More than 9 hours</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do any of these health conditions apply to you?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_conditions1" value="none"> None of these</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions1" value="kidney"> Severe kidney disease (Mutravaha srotas vikara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions1" value="cancer"> Cancer (Arbuda)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions1" value="digestive"> Severe digestive disorder (Grahani, Pravahika, Adhmana)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions1" value="alcohol"> Alcohol/substance dependency (Madatyaya)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>A few more health questions — do any apply to you?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="none"> None of these</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="bp"> High blood pressure (Rakta chapa vriddhi)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="diabetes2"> Type 2 diabetes (Madhumeha)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="diabetes1"> Type 1 diabetes (Sahaja Madhumeha)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="thyroid"> Thyroid cancer history (Thyroid arbuda)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="liver"> Liver disease / fatty liver (Yakrit vikara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="pcos"> PCOS (Aarthava kshaya / Granthibhuta yoni)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="arthritis"> Osteoarthritis (Sandhivata)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="depression"> Severe depression (Gambhir vishad)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_conditions2" value="heart"> Congestive heart failure (Hridaya daurbalya)</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 4: HEALTH CONTINUED ===================== -->
+      <div class="quiz-section" data-section="4">
+        <span class="quiz-section-tag">Section 4 — Health (Continued)</span>
+        <h2>Treatment History</h2>
+
+        <div class="quiz-question">
+          <h3>Have you taken any Ayurvedic or other weight loss treatment in the past month?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_pastTreatment" value="ayurvedic"> Yes, herbal/Ayurvedic (e.g., Medohar Guggulu, Triphala)</label>
+            <label class="quiz-option"><input type="radio" name="q_pastTreatment" value="allopathic"> Yes, allopathic weight loss medication</label>
+            <label class="quiz-option"><input type="radio" name="q_pastTreatment" value="none"> No current treatment</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Have you ever tried to lose weight through a diet program?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_dietHistory" value="yes"> Yes</label>
+            <label class="quiz-option"><input type="radio" name="q_dietHistory" value="no"> No</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>If recommended by your Vaidya, are you willing to:</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_willing" value="reduce_food"> Reduce calorie/food intake alongside treatment</label>
+            <label class="quiz-option"><input type="checkbox" name="q_willing" value="increase_activity"> Increase physical activity alongside treatment</label>
+            <label class="quiz-option"><input type="checkbox" name="q_willing" value="none"> None of the above</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Has your weight changed in the last year?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_weightChange" value="lost_sig"> Lost a significant amount</label>
+            <label class="quiz-option"><input type="radio" name="q_weightChange" value="lost_little"> Lost a little</label>
+            <label class="quiz-option"><input type="radio" name="q_weightChange" value="same"> About the same</label>
+            <label class="quiz-option"><input type="radio" name="q_weightChange" value="gained_little"> Gained a little</label>
+            <label class="quiz-option"><input type="radio" name="q_weightChange" value="gained_sig"> Gained a significant amount</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 5: VITALS ===================== -->
+      <div class="quiz-section" data-section="5">
+        <span class="quiz-section-tag">Section 5 — Vitals</span>
+        <h2>Blood Pressure & Heart Rate</h2>
+
+        <div class="quiz-question">
+          <h3>What is your average blood pressure range?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_bp" value="normal"> Below 120/80 (Normal / Prakrit)</label>
+            <label class="quiz-option"><input type="radio" name="q_bp" value="elevated"> 120-129/less than 80 (Elevated / Ucha pravartha)</label>
+            <label class="quiz-option"><input type="radio" name="q_bp" value="high1"> 130-139/80-89 (High Stage 1 / Prathama avasta)</label>
+            <label class="quiz-option"><input type="radio" name="q_bp" value="high2"> 140/90 or above (High Stage 2 / Dvitiya avasta)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How about your average resting heart rate (Hridaya gati)?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_heartRate" value="slow"> Below 60 bpm (Slow / Mand)</label>
+            <label class="quiz-option"><input type="radio" name="q_heartRate" value="normal"> 60-100 bpm (Normal / Sama)</label>
+            <label class="quiz-option"><input type="radio" name="q_heartRate" value="fast"> 101-130 bpm (Slightly fast / Kshipra)</label>
+            <label class="quiz-option"><input type="radio" name="q_heartRate" value="veryfast"> Above 130 bpm (Fast / Ati kshipra)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you currently take any medications or herbal supplements?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_medications" value="yes"> Yes</label>
+            <label class="quiz-option"><input type="radio" name="q_medications" value="no"> No</label>
+          </div>
+          <div class="form-group" style="margin-top: var(--space-sm);">
+            <textarea class="form-input" id="q_medicationDetails" placeholder="If yes, please list your current medications/supplements..." rows="3" style="resize:vertical;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 6: PRAKRITI ===================== -->
+      <div class="quiz-section" data-section="6">
+        <span class="quiz-section-tag">Section 6 — Prakriti (Body Constitution)</span>
+        <h2>Your Body Type 🧘</h2>
+
+        <div class="quiz-question">
+          <h3>What is your body type (Prakriti)?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_prakriti" value="vata"> Thin, light, talks fast, creative (Vata)</label>
+            <label class="quiz-option"><input type="radio" name="q_prakriti" value="pitta"> Medium build, sharp mind, leadership quality (Pitta)</label>
+            <label class="quiz-option"><input type="radio" name="q_prakriti" value="kapha"> Heavy build, calm, steady (Kapha)</label>
+            <label class="quiz-option"><input type="radio" name="q_prakriti" value="unknown"> I don't know my Prakriti</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What is your skin type?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_skin" value="vata"> Dry, rough, dark (Vata skin)</label>
+            <label class="quiz-option"><input type="radio" name="q_skin" value="pitta"> Oily, sensitive, reddish (Pitta skin)</label>
+            <label class="quiz-option"><input type="radio" name="q_skin" value="kapha"> Thick, moist, pale (Kapha skin)</label>
+            <label class="quiz-option"><input type="radio" name="q_skin" value="combo"> Combination skin</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What is your hair type?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_hair" value="vata"> Dry, frizzy, thin (Vata)</label>
+            <label class="quiz-option"><input type="radio" name="q_hair" value="pitta"> Fine, oily, early greying (Pitta)</label>
+            <label class="quiz-option"><input type="radio" name="q_hair" value="kapha"> Thick, oily, lustrous (Kapha)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How is your appetite (Agni)?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_agni" value="vishama"> Very irregular, sometimes no hunger (Vishama Agni - Vata)</label>
+            <label class="quiz-option"><input type="radio" name="q_agni" value="tikshna"> Very strong, gets angry if hungry (Tikshna Agni - Pitta)</label>
+            <label class="quiz-option"><input type="radio" name="q_agni" value="manda"> Low appetite, slow digestion (Manda Agni - Kapha)</label>
+            <label class="quiz-option"><input type="radio" name="q_agni" value="sama"> Balanced appetite (Sama Agni)</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 7: DIGESTION ===================== -->
+      <div class="quiz-section" data-section="7">
+        <span class="quiz-section-tag">Section 7 — Digestion & Gut Health</span>
+        <h2>Your Digestive Health 🫄</h2>
+
+        <div class="quiz-question">
+          <h3>How is your digestion generally?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_digestion" value="bloating"> Bloating and gas after meals (Adhmana)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestion" value="acidity"> Acidity or heartburn (Amlapitta)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestion" value="constipation"> Constipation (Vibandha)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestion" value="loose_stools"> Loose stools or diarrhea (Atisara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestion" value="normal"> Normal digestion</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How often do you pass stools?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_stool" value="once"> Once a day (Uttam)</label>
+            <label class="quiz-option"><input type="radio" name="q_stool" value="twice"> Twice or more a day</label>
+            <label class="quiz-option"><input type="radio" name="q_stool" value="alternate"> Once in 2 days (Manda)</label>
+            <label class="quiz-option"><input type="radio" name="q_stool" value="irregular"> Irregular</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you experience any of the following digestive issues?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_digestiveIssues" value="burping"> Burping frequently (Udgara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestiveIssues" value="heaviness"> Heaviness after eating (Guruta)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestiveIssues" value="undigested"> Undigested food in stools (Ama)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestiveIssues" value="bad_breath"> Bad breath (Mukha durgandha)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_digestiveIssues" value="none"> None of these</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How much water do you drink daily?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_water" value="<1"> Less than 1 litre</label>
+            <label class="quiz-option"><input type="radio" name="q_water" value="1-2"> 1-2 litres</label>
+            <label class="quiz-option"><input type="radio" name="q_water" value="2-3"> 2-3 litres</label>
+            <label class="quiz-option"><input type="radio" name="q_water" value="3+"> More than 3 litres</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 8: LIFESTYLE ===================== -->
+      <div class="quiz-section" data-section="8">
+        <span class="quiz-section-tag">Section 8 — Lifestyle & Daily Routine (Dinacharya)</span>
+        <h2>Your Daily Routine 🌅</h2>
+
+        <div class="quiz-question">
+          <h3>What time do you usually wake up?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_wakeUp" value="before5"> Before 5 AM (Brahma muhurta - ideal)</label>
+            <label class="quiz-option"><input type="radio" name="q_wakeUp" value="5-7"> 5-7 AM (Good)</label>
+            <label class="quiz-option"><input type="radio" name="q_wakeUp" value="7-9"> 7-9 AM (Average)</label>
+            <label class="quiz-option"><input type="radio" name="q_wakeUp" value="after9"> After 9 AM (Late - Kapha imbalance)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What time do you usually go to sleep?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_sleepTime" value="before10"> Before 10 PM (Ideal)</label>
+            <label class="quiz-option"><input type="radio" name="q_sleepTime" value="10-12"> 10 PM - 12 AM</label>
+            <label class="quiz-option"><input type="radio" name="q_sleepTime" value="after12"> After 12 AM (Late night)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How physically active are you during the day?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_activity" value="very"> Very active (exercise daily)</label>
+            <label class="quiz-option"><input type="radio" name="q_activity" value="moderate"> Moderately active (walk regularly)</label>
+            <label class="quiz-option"><input type="radio" name="q_activity" value="slight"> Slightly active (light work)</label>
+            <label class="quiz-option"><input type="radio" name="q_activity" value="sedentary"> Sedentary (sitting most of the day)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What type of exercise do you do?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_exercise" value="yoga"> Yoga and Pranayama</label>
+            <label class="quiz-option"><input type="checkbox" name="q_exercise" value="walking"> Walking or jogging</label>
+            <label class="quiz-option"><input type="checkbox" name="q_exercise" value="gym"> Gym or weight training</label>
+            <label class="quiz-option"><input type="checkbox" name="q_exercise" value="none"> No exercise</label>
+            <label class="quiz-option"><input type="checkbox" name="q_exercise" value="mix"> Mix of multiple</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 9: DIET ===================== -->
+      <div class="quiz-section" data-section="9">
+        <span class="quiz-section-tag">Section 9 — Diet & Food Habits (Ahara)</span>
+        <h2>Your Food Habits 🍽️</h2>
+
+        <div class="quiz-question">
+          <h3>What type of diet do you follow?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_diet" value="veg"> Fully vegetarian (Shakahari)</label>
+            <label class="quiz-option"><input type="radio" name="q_diet" value="lacto_veg"> Vegetarian with dairy (Lacto vegetarian)</label>
+            <label class="quiz-option"><input type="radio" name="q_diet" value="non_veg"> Non-vegetarian (Mansahari)</label>
+            <label class="quiz-option"><input type="radio" name="q_diet" value="vegan"> Vegan</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How many meals do you eat per day?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_meals" value="1"> 1 meal</label>
+            <label class="quiz-option"><input type="radio" name="q_meals" value="2"> 2 meals</label>
+            <label class="quiz-option"><input type="radio" name="q_meals" value="3"> 3 meals</label>
+            <label class="quiz-option"><input type="radio" name="q_meals" value="3+"> More than 3 meals / frequent snacking</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How would you describe your food choices?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_foodChoice" value="home"> Mostly fresh home-cooked food</label>
+            <label class="quiz-option"><input type="radio" name="q_foodChoice" value="mix"> Mix of home and outside food</label>
+            <label class="quiz-option"><input type="radio" name="q_foodChoice" value="outside"> Mostly outside/packaged food</label>
+            <label class="quiz-option"><input type="radio" name="q_foodChoice" value="junk"> Junk food frequently</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you consume any of the following regularly?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_foodHabits" value="fried"> Fried and oily foods (Snigdha, Guru ahara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodHabits" value="spicy"> Spicy foods (Katu, Tikshna ahara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodHabits" value="sweet"> Sweet and heavy foods (Madhura, Guru ahara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodHabits" value="cold"> Cold foods and drinks (Shita ahara)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodHabits" value="raw"> Raw salads and sprouts</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodHabits" value="none"> None of the above</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you eat late at night (after 9 PM)?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_lateEating" value="never"> Never</label>
+            <label class="quiz-option"><input type="radio" name="q_lateEating" value="sometimes"> Sometimes</label>
+            <label class="quiz-option"><input type="radio" name="q_lateEating" value="frequently"> Frequently</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 10: MENTAL HEALTH ===================== -->
+      <div class="quiz-section" data-section="10">
+        <span class="quiz-section-tag">Section 10 — Mental Health & Stress (Manas Prakriti)</span>
+        <h2>Your Mental Wellbeing 🧠</h2>
+
+        <div class="quiz-question">
+          <h3>How is your stress level on a daily basis?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_stress" value="low"> Very low, I feel calm (Sattvic)</label>
+            <label class="quiz-option"><input type="radio" name="q_stress" value="moderate"> Moderate stress</label>
+            <label class="quiz-option"><input type="radio" name="q_stress" value="high_anxiety"> High stress, anxiety (Vata imbalance)</label>
+            <label class="quiz-option"><input type="radio" name="q_stress" value="high_anger"> Very high, often angry (Pitta imbalance)</label>
+            <label class="quiz-option"><input type="radio" name="q_stress" value="dull"> Feel dull, unmotivated (Kapha imbalance)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How would you describe your mental state mostly?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_mentalState" value="happy"> Happy and energetic (Prasanna)</label>
+            <label class="quiz-option"><input type="radio" name="q_mentalState" value="anxious"> Anxious and overthinking (Chinta)</label>
+            <label class="quiz-option"><input type="radio" name="q_mentalState" value="sad"> Sad or low (Vishad)</label>
+            <label class="quiz-option"><input type="radio" name="q_mentalState" value="irritable"> Irritable and angry (Krodha)</label>
+            <label class="quiz-option"><input type="radio" name="q_mentalState" value="dull"> Dull and lazy (Tamas)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you practice any of the following?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_mindPractice" value="meditation"> Daily meditation (Dhyana)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_mindPractice" value="pranayama"> Pranayama or breathing exercises</label>
+            <label class="quiz-option"><input type="checkbox" name="q_mindPractice" value="yoga"> Yoga</label>
+            <label class="quiz-option"><input type="checkbox" name="q_mindPractice" value="none"> None of these</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>How motivated are you to reach your weight goal?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_motivation" value="ready"> I am ready! (Taiyar hoon)</label>
+            <label class="quiz-option"><input type="radio" name="q_motivation" value="hopeful"> I am feeling hopeful (Asha hai)</label>
+            <label class="quiz-option"><input type="radio" name="q_motivation" value="cautious"> I am cautious (Sochh raha hoon)</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 11: WOMEN'S HEALTH ===================== -->
+      <div class="quiz-section" data-section="11" id="womensSection">
+        <span class="quiz-section-tag">Section 11 — Women's Health (Stri Swasthya)</span>
+        <h2>Women's Health 🌸</h2>
+        <p style="color: var(--text-muted); margin-bottom: var(--space-xl); font-size: 0.9rem;">This section is shown based on your gender selection. Skip if not applicable.</p>
+
+        <div class="quiz-question">
+          <h3>How is your menstrual cycle (Rajah chakra)?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_menstrual" value="regular"> Regular (28-32 days)</label>
+            <label class="quiz-option"><input type="radio" name="q_menstrual" value="irregular"> Irregular</label>
+            <label class="quiz-option"><input type="radio" name="q_menstrual" value="painful"> Painful (Kasta artava)</label>
+            <label class="quiz-option"><input type="radio" name="q_menstrual" value="heavy"> Heavy flow (Ati artava)</label>
+            <label class="quiz-option"><input type="radio" name="q_menstrual" value="light"> Very light or scanty (Alpa artava)</label>
+            <label class="quiz-option"><input type="radio" name="q_menstrual" value="menopause"> Post menopause</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you have PCOS or hormonal imbalance?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_pcos" value="diagnosed"> Yes, diagnosed</label>
+            <label class="quiz-option"><input type="radio" name="q_pcos" value="suspected"> Yes, suspected but not diagnosed</label>
+            <label class="quiz-option"><input type="radio" name="q_pcos" value="no"> No</label>
+            <label class="quiz-option"><input type="radio" name="q_pcos" value="unsure"> Not sure</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Have you been pregnant in the last 6 months?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_pregnant" value="yes"> Yes</label>
+            <label class="quiz-option"><input type="radio" name="q_pregnant" value="no"> No</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Are you currently breastfeeding?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_breastfeeding" value="yes"> Yes</label>
+            <label class="quiz-option"><input type="radio" name="q_breastfeeding" value="no"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 12: ADDICTION ===================== -->
+      <div class="quiz-section" data-section="12">
+        <span class="quiz-section-tag">Section 12 — Addiction & Habits (Vyasana)</span>
+        <h2>Habits & Addictions</h2>
+
+        <div class="quiz-question">
+          <h3>Do you consume tobacco or smoke?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_tobacco" value="never"> Never</label>
+            <label class="quiz-option"><input type="radio" name="q_tobacco" value="occasionally"> Occasionally</label>
+            <label class="quiz-option"><input type="radio" name="q_tobacco" value="daily"> Daily</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you consume alcohol?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_alcohol" value="never"> Never</label>
+            <label class="quiz-option"><input type="radio" name="q_alcohol" value="social"> Occasionally (social drinking)</label>
+            <label class="quiz-option"><input type="radio" name="q_alcohol" value="regularly"> Regularly</label>
+            <label class="quiz-option"><input type="radio" name="q_alcohol" value="daily"> Daily</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you consume tea or coffee?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_caffeine" value="never"> Never</label>
+            <label class="quiz-option"><input type="radio" name="q_caffeine" value="1-2"> 1-2 cups per day</label>
+            <label class="quiz-option"><input type="radio" name="q_caffeine" value="3-4"> 3-4 cups per day</label>
+            <label class="quiz-option"><input type="radio" name="q_caffeine" value="4+"> More than 4 cups per day</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 13: FAMILY HISTORY ===================== -->
+      <div class="quiz-section" data-section="13">
+        <span class="quiz-section-tag">Section 13 — Family History (Kula Vritta)</span>
+        <h2>Family Health History</h2>
+
+        <div class="quiz-question">
+          <h3>Does anyone in your family have the following?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_family" value="obesity"> Obesity / overweight (Medoroga)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_family" value="diabetes"> Diabetes (Madhumeha)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_family" value="heart"> Heart disease (Hridaya roga)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_family" value="thyroid"> Thyroid disorder (Gala ganda)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_family" value="bp"> High blood pressure (Rakta chapa)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_family" value="none"> None of the above</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 14: PREVIOUS AYURVEDIC ===================== -->
+      <div class="quiz-section" data-section="14">
+        <span class="quiz-section-tag">Section 14 — Previous Ayurvedic Treatment & Allergies</span>
+        <h2>Treatment History & Allergies</h2>
+
+        <div class="quiz-question">
+          <h3>Have you ever had Panchakarma treatment?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_panchakarma" value="yes"> Yes</label>
+            <label class="quiz-option"><input type="radio" name="q_panchakarma" value="no"> No</label>
+            <label class="quiz-option"><input type="radio" name="q_panchakarma" value="current"> Currently undergoing</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Have you ever taken Ayurvedic medicine for weight loss?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_ayurvedicHistory" value="worked"> Yes, it worked</label>
+            <label class="quiz-option"><input type="radio" name="q_ayurvedicHistory" value="no_results"> Yes, but no results</label>
+            <label class="quiz-option"><input type="radio" name="q_ayurvedicHistory" value="never"> No, never tried</label>
+            <label class="quiz-option"><input type="radio" name="q_ayurvedicHistory" value="current"> Currently taking</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you have any known food allergies?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_foodAllergies" value="dairy"> Dairy (Dugdha)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodAllergies" value="gluten"> Gluten (wheat sensitivity)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodAllergies" value="nuts"> Nuts</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodAllergies" value="soy"> Soy</label>
+            <label class="quiz-option"><input type="checkbox" name="q_foodAllergies" value="none"> No known allergies</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you have any herb allergies or reactions to Ayurvedic medicines?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_herbAllergy" value="yes"> Yes</label>
+            <label class="quiz-option"><input type="radio" name="q_herbAllergy" value="no"> No</label>
+            <label class="quiz-option"><input type="radio" name="q_herbAllergy" value="unsure"> Not sure</label>
+          </div>
+          <div class="form-group" style="margin-top: var(--space-sm);">
+            <textarea class="form-input" id="q_herbAllergyDetails" placeholder="If yes, please specify..." rows="2" style="resize:vertical;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SECTION 15: PREFERENCES & DETAILS ===================== -->
+      <div class="quiz-section" data-section="15">
+        <span class="quiz-section-tag">Section 15 — Preferences & Final Details</span>
+        <h2>Almost Done! 🎉</h2>
+
+        <div class="quiz-question">
+          <h3>Please select the options you are interested in:</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="muscle"> Maintaining muscle mass as I lose weight</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="oral"> Would prefer oral treatment (no injections)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="side_effects"> Managing potential side effects</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="rasayana"> Anti-ageing and longevity (Rasayana chikitsa)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="cognitive"> Improving cognitive function (Medhya)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="energy"> Improving energy levels (Bala/Ojas)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="hormones"> Regulating hormonal status</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="sleep"> Improving sleep quality (Nidra sudhar)</label>
+            <label class="quiz-option"><input type="checkbox" name="q_interests" value="nothing"> Nothing in particular</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Which of these is most important to you?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q_important" value="affordability"> Affordability (Kam kharcha)</label>
+            <label class="quiz-option"><input type="radio" name="q_important" value="privacy"> Privacy (Gopaniyata)</label>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>What is your date of birth?</h3>
+          <div class="form-group">
+            <input type="date" class="form-input" id="q_dob">
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Which city/state will your medicine be shipped to?</h3>
+          <div class="form-group">
+            <input type="text" class="form-input" id="q_city" placeholder="e.g. Ahmedabad, Gujarat">
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <h3>Do you have any further information you would like our Vaidya to know?</h3>
+          <div class="form-group">
+            <textarea class="form-input" id="q_additionalInfo" rows="3" placeholder="Any additional health concerns or information..." style="resize:vertical;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="quiz-nav">
+        <button class="btn btn-outline" id="prevBtn" onclick="navigateQuiz(-1)" style="display:none;">← Previous</button>
+        <div></div>
+        <button class="btn btn-primary" id="nextBtn" onclick="navigateQuiz(1)">Next →</button>
+        <button class="btn btn-accent btn-lg" id="submitBtn" onclick="submitQuiz()" style="display:none;">Submit Quiz 🎉</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const TOTAL_SECTIONS = 15;
+    let currentSection = 1;
+
+    function navigateQuiz(direction) {
+      const nextSection = currentSection + direction;
+
+      // Skip women's health section if not female
+      if (nextSection === 11 && direction === 1) {
+        const gender = document.querySelector('input[name="q_gender"]:checked');
+        if (!gender || gender.value !== 'female') {
+          currentSection = 11;
+          navigateQuiz(1);
+          return;
+        }
+      }
+
+      if (nextSection === 11 && direction === -1) {
+        const gender = document.querySelector('input[name="q_gender"]:checked');
+        if (!gender || gender.value !== 'female') {
+          currentSection = 11;
+          navigateQuiz(-1);
+          return;
+        }
+      }
+
+      if (nextSection < 1 || nextSection > TOTAL_SECTIONS) return;
+
+      // Hide current
+      document.querySelector(`.quiz-section[data-section="${currentSection}"]`).classList.remove('active');
+
+      // Show next
+      currentSection = nextSection;
+      const nextEl = document.querySelector(`.quiz-section[data-section="${currentSection}"]`);
+      nextEl.classList.remove('active');
+      // Force reflow for animation
+      void nextEl.offsetWidth;
+      nextEl.classList.add('active');
+
+      // Update progress
+      const progress = (currentSection / TOTAL_SECTIONS) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+      document.getElementById('progressText').textContent = `Section ${currentSection} of ${TOTAL_SECTIONS}`;
+
+      // Update buttons
+      document.getElementById('prevBtn').style.display = currentSection === 1 ? 'none' : 'inline-flex';
+      document.getElementById('nextBtn').style.display = currentSection === TOTAL_SECTIONS ? 'none' : 'inline-flex';
+      document.getElementById('submitBtn').style.display = currentSection === TOTAL_SECTIONS ? 'inline-flex' : 'none';
+
+      // Scroll to top of quiz
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function collectQuizData() {
+      const data = {};
+
+      // Text/number inputs
+      data.height = parseFloat(document.getElementById('q_height')?.value) || null;
+      data.weight = parseFloat(document.getElementById('q_weight')?.value) || null;
+      data.goalWeight = parseFloat(document.getElementById('q_goalWeight')?.value) || null;
+      data.dob = document.getElementById('q_dob')?.value || null;
+      data.city = document.getElementById('q_city')?.value || null;
+      data.additionalInfo = document.getElementById('q_additionalInfo')?.value || null;
+      data.medicationDetails = document.getElementById('q_medicationDetails')?.value || null;
+      data.herbAllergyDetails = document.getElementById('q_herbAllergyDetails')?.value || null;
+
+      // Radio buttons
+      const radios = ['q_gender', 'q_priority', 'q_reason', 'q_sleep', 'q_sleepHours',
+        'q_pastTreatment', 'q_dietHistory', 'q_weightChange', 'q_bp', 'q_heartRate',
+        'q_medications', 'q_prakriti', 'q_skin', 'q_hair', 'q_agni', 'q_stool',
+        'q_water', 'q_wakeUp', 'q_sleepTime', 'q_activity', 'q_diet', 'q_meals',
+        'q_foodChoice', 'q_lateEating', 'q_stress', 'q_mentalState', 'q_motivation',
+        'q_menstrual', 'q_pcos', 'q_pregnant', 'q_breastfeeding', 'q_tobacco',
+        'q_alcohol', 'q_caffeine', 'q_panchakarma', 'q_ayurvedicHistory',
+        'q_herbAllergy', 'q_important'];
+
+      radios.forEach(name => {
+        const selected = document.querySelector(`input[name="${name}"]:checked`);
+        data[name.replace('q_', '')] = selected ? selected.value : null;
+      });
+
+      // Checkboxes
+      const checkboxes = ['q_symptoms', 'q_conditions1', 'q_conditions2', 'q_willing',
+        'q_digestion', 'q_digestiveIssues', 'q_exercise', 'q_foodHabits',
+        'q_mindPractice', 'q_family', 'q_foodAllergies', 'q_interests'];
+
+      checkboxes.forEach(name => {
+        const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
+        data[name.replace('q_', '')] = Array.from(checked).map(c => c.value);
+      });
+
+      // Calculate BMI
+      if (data.weight && data.height) {
+        data.bmi = VedTrimDB.calculateBMI(data.weight, data.height);
+      }
+
+      return data;
+    }
+
+    async function submitQuiz() {
+      const data = collectQuizData();
+      const user = VedTrimDB.getCurrentUser();
+
+      if (!user) {
+        showToast('Please log in to save your quiz results.', 'error');
+        setTimeout(() => window.location.href = 'login.html', 1500);
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
+      // Save quiz data to MySQL database
+      const saved = await VedTrimDB.saveQuizData(user.email, data);
+      if (!saved) {
+        showToast('Failed to save quiz data. Please try again.', 'error');
+        btn.textContent = 'Submit Quiz 🎉';
+        btn.disabled = false;
+        return;
+      }
+
+      setTimeout(() => {
+        triggerConfetti();
+        showToast('Health quiz completed! Your Vaidya will review your profile. 🌿', 'success', 4000);
+
+        // Show completion screen
+        document.querySelector('.quiz-container').innerHTML = `
+          <div class="text-center" style="padding: var(--space-4xl) 0; animation: fadeInUp 0.5s ease;">
+            <div style="font-size: 4rem; margin-bottom: var(--space-lg);">🎉</div>
+            <h2 style="color: var(--primary); margin-bottom: var(--space-md);">Quiz Completed!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 0 auto var(--space-2xl);">
+              Thank you for completing your Ayurvedic health assessment. 
+              Our Vaidya will review your profile and create a personalised treatment plan for you.
+            </p>
+            ${data.bmi ? `
+              <div class="card" style="max-width: 300px; margin: 0 auto var(--space-2xl); padding: var(--space-xl);">
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Your BMI</div>
+                <div style="font-size: 2.5rem; font-weight: 800; color: ${VedTrimDB.getBMICategory(data.bmi).color}; font-family: var(--font-heading);">${data.bmi}</div>
+                <div style="font-weight: 600; color: ${VedTrimDB.getBMICategory(data.bmi).color};">${VedTrimDB.getBMICategory(data.bmi).label}</div>
+              </div>
+            ` : ''}
+            <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+              <a href="pricing.html" class="btn btn-primary btn-lg">Choose Your Plan</a>
+              <a href="dashboard.html" class="btn btn-outline btn-lg">Go to Dashboard</a>
+            </div>
+          </div>
+        `;
+      }, 1500);
+    }
+
+    // Add click effect to quiz options
+    document.querySelectorAll('.quiz-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const input = this.querySelector('input');
+        if (input.type === 'radio') {
+          // Remove selected from siblings
+          this.closest('.quiz-options').querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+          this.classList.add('selected');
+        } else {
+          this.classList.toggle('selected', input.checked);
+        }
+      });
+    });
+
+    // Redirect if not logged in
+    if (!VedTrimDB.isLoggedIn()) {
+      showToast('Please sign up or log in first.', 'info');
+      setTimeout(() => window.location.href = 'signup.html', 1500);
+    }
+  </script>
+  <script src="chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Medicines — Ayurvedic Herbs & Remedies | VedTrim</title>
+  <meta name="description" content="Explore VedTrim's comprehensive guide to Ayurvedic herbs, supplements, and lifestyle tips for natural weight loss. Learn about Guggul, Triphala, Ashwagandha, and more.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🌿</div>Ved<span class="logo-highlight">Trim</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a><a href="about.html">Ayurveda?</a><a href="pricing.html">Pricing</a><a href="reviews.html">Reviews</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="consult.html" class="nav-consult-link">Consult</a><a href="medicines.html" class="active nav-consult-link">Medicines</a><a href="index.html#seminar-booking" class="nav-seminar-link">🎓 Free Seminar</a>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline btn-sm nav-auth-btn">Log In</a>
+        <a href="signup.html" class="btn btn-primary btn-sm nav-auth-btn">Get Started</a>
+        <a href="dashboard.html" class="btn btn-primary btn-sm nav-dash-btn" style="display:none;">Dashboard</a>
+        <a href="#" class="btn btn-outline btn-sm nav-logout-btn" style="display:none;">Logout</a>
+      </div>
+      <div class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Hero -->
+  <section class="page-hero" style="background: var(--bg-gradient-hero); padding: var(--space-4xl) 0;">
+    <div style="position: relative; z-index: 2;">
+      <div style="font-size: 3rem; margin-bottom: var(--space-md);">🌿</div>
+      <h1 style="color: white;">Our Ayurvedic Medicines</h1>
+      <p style="color: rgba(255,255,255,0.85); max-width: 650px; margin: var(--space-md) auto 0;">Discover the powerful herbs, supplements, and lifestyle practices we use to help you lose weight naturally — backed by 5,000 years of Ayurvedic wisdom.</p>
+    </div>
+  </section>
+
+  <!-- Section 1: Top Ayurvedic Herbs & Supplements -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">Core Formulations</span>
+        <h2>Top Ayurvedic Herbs & Supplements</h2>
+        <p>These are the primary herbs and formulations our Vaidyas prescribe for weight management</p>
+      </div>
+
+      <div class="grid grid-3 herb-grid">
+        <!-- Guggul -->
+        <div class="herb-card animate-on-scroll delay-1">
+          <div class="herb-visual">
+            <img src="images/guggul.png" alt="Guggul resin" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+          </div>
+          <div class="herb-content">
+            <h3>Guggul <span class="herb-latin">(Commiphora Mukul)</span></h3>
+            <p class="herb-desc">A potent resin known for "scraping" fat from tissues and stimulating the thyroid to boost metabolism.</p>
+            <div class="herb-properties">
+              <div class="herb-prop good"><span>✓</span> Stimulates metabolism</div>
+              <div class="herb-prop good"><span>✓</span> Breaks down stubborn body fat</div>
+              <div class="herb-prop good"><span>✓</span> Supports thyroid function</div>
+              <div class="herb-prop caution"><span>⚠</span> Avoid during pregnancy</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Triphala -->
+        <div class="herb-card animate-on-scroll delay-2">
+          <div class="herb-visual">
+            <img src="images/triphala.png" alt="Triphala three fruits" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+          </div>
+          <div class="herb-content">
+            <h3>Triphala <span class="herb-latin">(Three Fruits)</span></h3>
+            <p class="herb-desc">A combination of three fruits (Amla, Haritaki, Bibhitaki) that acts as a natural laxative and improves digestive health.</p>
+            <div class="herb-properties">
+              <div class="herb-prop good"><span>✓</span> Natural detox & laxative</div>
+              <div class="herb-prop good"><span>✓</span> Improves digestion</div>
+              <div class="herb-prop good"><span>✓</span> Rich in antioxidants</div>
+              <div class="herb-prop caution"><span>⚠</span> Start with small dose</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trikatu -->
+        <div class="herb-card animate-on-scroll delay-3">
+          <div class="herb-visual">
+            <img src="images/trikatu.png" alt="Trikatu spices" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+          </div>
+          <div class="herb-content">
+            <h3>Trikatu <span class="herb-latin">(Three Pungents)</span></h3>
+            <p class="herb-desc">A mix of ginger, black pepper, and long pepper that aids in reducing metabolic waste and enhancing digestion.</p>
+            <div class="herb-properties">
+              <div class="herb-prop good"><span>✓</span> Enhances digestion</div>
+              <div class="herb-prop good"><span>✓</span> Reduces metabolic waste</div>
+              <div class="herb-prop good"><span>✓</span> Boosts nutrient absorption</div>
+              <div class="herb-prop caution"><span>⚠</span> May cause heat in body</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medohar Guggulu -->
+        <div class="herb-card animate-on-scroll delay-1">
+          <div class="herb-visual">
+            <img src="images/medohar_guggulu.png" alt="Medohar Guggulu tablets" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+          </div>
+          <div class="herb-content">
+            <h3>Medohar Guggulu <span class="herb-latin">(Classical Tablet)</span></h3>
+            <p class="herb-desc">A classical Ayurvedic tablet often used for weight management. Combines multiple herbs for synergistic fat-reducing effect.</p>
+            <div class="herb-properties">
+              <div class="herb-prop good"><span>✓</span> Classical weight management formula</div>
+              <div class="herb-prop good"><span>✓</span> Reduces cholesterol</div>
+              <div class="herb-prop good"><span>✓</span> Balances Kapha dosha</div>
+              <div class="herb-prop caution"><span>⚠</span> Consult Vaidya for dosage</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Punarnava -->
+        <div class="herb-card animate-on-scroll delay-2">
+          <div class="herb-visual">
+            <img src="images/punarnava.png" alt="Punarnava plant" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+          </div>
+          <div class="herb-content">
+            <h3>Punarnava <span class="herb-latin">(Boerhavia Diffusa)</span></h3>
+            <p class="herb-desc">Acting as a natural diuretic, it is highly effective for reducing weight caused by water retention and bloating.</p>
+            <div class="herb-properties">
+              <div class="herb-prop good"><span>✓</span> Reduces water retention</div>
+              <div class="herb-prop good"><span>✓</span> Anti-inflammatory</div>
+              <div class="herb-prop good"><span>✓</span> Supports kidney function</div>
+              <div class="herb-prop caution"><span>⚠</span> Monitor with kidney conditions</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fenugreek -->
+        <div class="herb-card animate-on-scroll delay-3">
+          <div class="herb-visual">
+            <img src="images/fenugreek.png" alt="Fenugreek methi seeds" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+          </div>
+          <div class="herb-content">
+            <h3>Fenugreek <span class="herb-latin">(Methi Seeds)</span></h3>
+            <p class="herb-desc">High in fiber, these seeds reduce hunger and help the body excrete fat. Also regulates blood sugar.</p>
+            <div class="herb-properties">
+              <div class="herb-prop good"><span>✓</span> Promotes satiety</div>
+              <div class="herb-prop good"><span>✓</span> Blood sugar regulation</div>
+              <div class="herb-prop good"><span>✓</span> High fiber content</div>
+              <div class="herb-prop caution"><span>⚠</span> May interact with diabetes meds</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Garcinia Cambogia -->
+        <div class="herb-card animate-on-scroll delay-1">
+          <div class="herb-visual">
+            <img src="images/garcinia_cambogia.png" alt="Garcinia Cambogia fruit" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+          </div>
+          <div class="herb-content">
+            <h3>Garcinia Cambogia <span class="herb-latin">(Vrikshamla)</span></h3>
+            <p class="herb-desc">A single-herb supplement that blocks fat production and naturally suppresses appetite via HCA (hydroxycitric acid).</p>
+            <div class="herb-properties">
+              <div class="herb-prop good"><span>✓</span> Appetite suppression</div>
+              <div class="herb-prop good"><span>✓</span> Blocks fat production</div>
+              <div class="herb-prop good"><span>✓</span> Boosts serotonin</div>
+              <div class="herb-prop caution"><span>⚠</span> Avoid with liver conditions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Single Herbs & Spices -->
+  <section class="section section-cream">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">Kitchen Pharmacy</span>
+        <h2>Single Herbs & Spices for Weight Loss</h2>
+        <p>These can be used individually as powders, teas, or capsules</p>
+      </div>
+
+      <div class="grid grid-4 spice-grid">
+        <div class="spice-card animate-on-scroll delay-1">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/ginger.png" alt="Ginger" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Ginger <span class="herb-latin">(Shunthi)</span></h4>
+          <p>Known as the "universal medicine," it increases body heat (thermogenesis) to burn fat and improves digestion.</p>
+        </div>
+
+        <div class="spice-card animate-on-scroll delay-2">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/cinnamon.png" alt="Cinnamon" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Cinnamon <span class="herb-latin">(Dalchini)</span></h4>
+          <p>Helps regulate blood sugar levels, reducing insulin spikes and fat storage, especially belly fat.</p>
+        </div>
+
+        <div class="spice-card animate-on-scroll delay-3">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/turmeric.png" alt="Turmeric" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Turmeric <span class="herb-latin">(Haridra)</span></h4>
+          <p>Contains curcumin, which reduces inflammation linked to obesity and helps the liver process fat efficiently.</p>
+        </div>
+
+        <div class="spice-card animate-on-scroll delay-1">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/black_pepper.png" alt="Black Pepper" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Black Pepper <span class="herb-latin">(Kali Mirch)</span></h4>
+          <p>Contains piperine, which speeds up metabolic rate and helps break down fat cells.</p>
+        </div>
+
+        <div class="spice-card animate-on-scroll delay-2">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/cumin.png" alt="Cumin" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Cumin <span class="herb-latin">(Jeera)</span></h4>
+          <p>Stimulates digestive enzymes and accelerates the metabolic rate for effective weight management.</p>
+        </div>
+
+        <div class="spice-card animate-on-scroll delay-3">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/ashwagandha.png" alt="Ashwagandha" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Ashwagandha <span class="herb-latin">(Winter Cherry)</span></h4>
+          <p>Lowers cortisol (stress hormone), preventing stress-related weight gain around the abdomen.</p>
+        </div>
+
+        <div class="spice-card animate-on-scroll delay-1">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/aloe_vera.png" alt="Aloe Vera" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Aloe Vera <span class="herb-latin">(Kumari)</span></h4>
+          <p>Drinking its juice on an empty stomach helps detoxify the digestive tract and prevents fat accumulation.</p>
+        </div>
+
+        <div class="spice-card animate-on-scroll delay-2">
+          <div class="spice-icon" style="padding:0;overflow:hidden;"><img src="images/amla.png" alt="Amla" style="width:100%;height:100%;object-fit:cover;"></div>
+          <h4>Amla <span class="herb-latin">(Indian Gooseberry)</span></h4>
+          <p>A superfood that flushes out toxins and keeps the digestive system running smoothly. Rich in Vitamin C.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Dietary Tips -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">Eat Right, Lose Weight</span>
+        <h2>Dietary Tips for Weight Loss</h2>
+        <p>Ayurvedic food recommendations that complement your herbal treatment</p>
+      </div>
+
+      <div class="grid grid-2" style="gap: var(--space-2xl); max-width: 900px; margin: 0 auto;">
+        <div class="lifestyle-card animate-on-scroll delay-1">
+          <div class="lifestyle-icon">🥛</div>
+          <h4>Buttermilk (Takra)</h4>
+          <p>Consume thin buttermilk with cumin and black pepper to support metabolism. Best taken after lunch.</p>
+        </div>
+
+        <div class="lifestyle-card animate-on-scroll delay-2">
+          <div class="lifestyle-icon">🍵</div>
+          <h4>Warm Water / Ginger Tea</h4>
+          <p>Drinking warm water throughout the day aids in burning fat. Adding ginger amplifies thermogenic effect.</p>
+        </div>
+
+        <div class="lifestyle-card animate-on-scroll delay-1">
+          <div class="lifestyle-icon">🍯</div>
+          <h4>Honey (Madhu)</h4>
+          <p>Limited consumption of honey with warm water and lemon is considered a "scraping" agent for old fat.</p>
+        </div>
+
+        <div class="lifestyle-card animate-on-scroll delay-2">
+          <div class="lifestyle-icon">🏃</div>
+          <h4>Regular Activity</h4>
+          <p>Daily exercise to ensure sweating is emphasized. Sweating is one of Ayurveda's key detox mechanisms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Lifestyle Actions -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag" style="color: var(--accent-light);">Daily Habits</span>
+        <h2>Single Lifestyle Actions</h2>
+        <p>In Ayurveda, simple daily habits are just as important as herbs</p>
+      </div>
+
+      <div class="grid grid-2" style="gap: var(--space-2xl); max-width: 900px; margin: 0 auto;">
+        <div class="card card-dark animate-on-scroll delay-1" style="padding: var(--space-2xl);">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">💧</div>
+          <h4 style="color: var(--accent-light); margin-bottom: var(--space-sm);">Lukewarm Water</h4>
+          <p>Drinking warm water throughout the day, especially first thing in the morning, helps "melt" fat and jumpstart digestion. Your Agni (digestive fire) needs warmth to function optimally.</p>
+        </div>
+
+        <div class="card card-dark animate-on-scroll delay-2" style="padding: var(--space-2xl);">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">🍯</div>
+          <h4 style="color: var(--accent-light); margin-bottom: var(--space-sm);">Honey + Warm Water</h4>
+          <p>When taken with warm water and lemon, honey is considered a "scraping" agent for old, accumulated fat (Ama). Take it every morning on an empty stomach for best results.</p>
+        </div>
+
+        <div class="card card-dark animate-on-scroll delay-1" style="padding: var(--space-2xl);">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">🚶</div>
+          <h4 style="color: var(--accent-light); margin-bottom: var(--space-sm);">Brisk Walking (Shatapavali)</h4>
+          <p>Ayurveda recommends a short walk after every meal to ensure proper digestion and prevent fat storage. Even 15 minutes after lunch can make a significant difference.</p>
+        </div>
+
+        <div class="card card-dark animate-on-scroll delay-2" style="padding: var(--space-2xl);">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">😴</div>
+          <h4 style="color: var(--accent-light); margin-bottom: var(--space-sm);">Avoid Daytime Sleep</h4>
+          <p>Sleeping during the day (Divaswapna) is one of the primary causes of Kapha accumulation and weight gain in Ayurveda. Stay active during Kapha hours (6 AM - 10 AM).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Important Disclaimer -->
+  <section class="section section-cream">
+    <div class="container container-narrow">
+      <div class="animate-on-scroll">
+        <div style="padding: var(--space-2xl); background: var(--bg-white); border-radius: var(--radius-lg); border: 2px solid var(--accent); box-shadow: var(--shadow-gold);">
+          <h3 style="text-align: center; margin-bottom: var(--space-lg);">⚠️ Important Medical Disclaimer</h3>
+          <p style="font-size: 0.95rem; line-height: 1.8;">All herbs and medicines mentioned above are prescribed by our qualified Vaidyas (BAMS/MD Ayurveda) only after a thorough consultation. <strong>Do not self-medicate.</strong> Each person's Prakriti (body constitution) is different, and the wrong combination can be harmful.</p>
+          <p style="font-size: 0.95rem; line-height: 1.8;">Our Vaidyas will assess your unique body type, existing conditions, and create a <strong>personalised formulation</strong> that's safe and effective for you.</p>
+          <div style="text-align: center; margin-top: var(--space-xl);">
+            <a href="consult.html" class="btn btn-primary btn-lg">Consult a Vaidya — ₹700</a>
+            <span style="display: block; margin-top: var(--space-sm); font-size: 0.85rem; color: var(--text-muted);">Or <a href="pricing.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">view monthly plans</a> starting ₹3,499</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container text-center animate-on-scroll">
+      <span class="section-tag">Start Your Journey</span>
+      <h2 style="margin-bottom: var(--space-md);">Ready to Experience Ayurvedic Healing?</h2>
+      <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto var(--space-2xl);">All medicines are included in our plans. Get your personalised prescription from an expert Vaidya today.</p>
+      <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+        <a href="signup.html" class="btn btn-primary btn-lg">Start Free Today</a>
+        <a href="pricing.html" class="btn btn-outline btn-lg">View Plans</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="index.html" class="nav-logo"><div class="logo-icon">🌿</div>Ved<span class="logo-highlight">Trim</span></a><p style="margin-top: var(--space-md);">Ancient Ayurvedic wisdom meets modern weight loss science.</p></div>
+        <div class="footer-col"><h4>Quick Links</h4><a href="about.html">About Us</a><a href="pricing.html">Pricing</a><a href="reviews.html">Reviews</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></div>
+        <div class="footer-col"><h4>Programs</h4><a href="pricing.html">Basic Plan</a><a href="pricing.html">Premium Plan</a><a href="consult.html">One-Time Consultation</a><a href="medicines.html">Our Medicines</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="mailto:support@vedtrim.com">📧 support@vedtrim.com</a><a href="tel:+919879065567">📞 +91 98790 65567</a><a>📍 Kudasan, Gandhinagar</a><a>Gujarat, India</a></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2026 VedTrim. All rights reserved.</p><div class="footer-social"><a href="#">📘</a><a href="#">📸</a><a href="#">🐦</a><a href="#">📺</a></div></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop">↑</button>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

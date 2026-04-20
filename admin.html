@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — VedTrim</title>
+  <meta name="description" content="VedTrim Admin Dashboard - Manage clients, vaidyas, and reviews.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <style>
+    .admin-container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    .admin-header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      color: white; padding: 30px 40px; border-radius: 16px;
+      margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .admin-header h1 { font-size: 1.8rem; display: flex; align-items: center; gap: 12px; }
+    .admin-header .badge { background: #e74c3c; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; }
+    .admin-tabs {
+      display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+      background: var(--bg-card); padding: 8px; border-radius: 12px; box-shadow: var(--shadow-sm);
+    }
+    .admin-tab {
+      padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;
+      font-size: 0.9rem; font-weight: 600; transition: all 0.3s;
+      background: transparent; color: var(--text-muted);
+    }
+    .admin-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(74,103,65,0.3); }
+    .admin-tab:hover:not(.active) { background: var(--bg-warm); color: var(--text-primary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .admin-card {
+      background: var(--bg-card); border-radius: 12px; padding: 24px;
+      box-shadow: var(--shadow-sm); margin-bottom: 20px; border: 1px solid var(--border-light);
+    }
+    .admin-card h3 { margin-bottom: 16px; color: var(--text-primary); font-size: 1.1rem; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: linear-gradient(135deg, var(--primary-light), var(--bg-warm));
+      padding: 20px; border-radius: 12px; text-align: center;
+    }
+    .stat-card .stat-num { font-size: 2rem; font-weight: 700; color: var(--primary); }
+    .stat-card .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .data-table th {
+      background: var(--primary); color: white; padding: 12px 16px;
+      text-align: left; font-weight: 600; position: sticky; top: 0;
+    }
+    .data-table td { padding: 10px 16px; border-bottom: 1px solid var(--border-light); }
+    .data-table tr:hover { background: var(--bg-warm); }
+    .data-table th:first-child { border-radius: 8px 0 0 0; }
+    .data-table th:last-child { border-radius: 0 8px 0 0; }
+    .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-light); }
+    .btn-sm {
+      padding: 5px 12px; font-size: 0.75rem; border: none; border-radius: 6px;
+      cursor: pointer; font-weight: 600; transition: all 0.2s;
+    }
+    .btn-edit { background: #3498db; color: white; }
+    .btn-edit:hover { background: #2980b9; }
+    .btn-delete { background: #e74c3c; color: white; }
+    .btn-delete:hover { background: #c0392b; }
+    .btn-reply { background: #27ae60; color: white; }
+    .btn-reply:hover { background: #219a52; }
+    .btn-save { background: var(--primary); color: white; }
+    .btn-save:hover { background: var(--primary-dark); }
+    .actions-cell { display: flex; gap: 6px; flex-wrap: wrap; }
+    .search-bar {
+      width: 100%; padding: 10px 16px; border: 1px solid var(--border-light);
+      border-radius: 8px; font-size: 0.9rem; margin-bottom: 16px;
+      background: var(--bg-warm);
+    }
+    .review-card {
+      background: var(--bg-warm); border-radius: 10px; padding: 16px;
+      margin-bottom: 12px; border-left: 4px solid var(--primary);
+    }
+    .review-card.hidden-review { opacity: 0.5; border-left-color: #e74c3c; }
+    .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .review-stars { color: #f1c40f; font-size: 1.1rem; }
+    .review-text { color: var(--text-secondary); margin-bottom: 8px; line-height: 1.5; }
+    .review-reply { background: rgba(74,103,65,0.1); padding: 10px; border-radius: 8px; margin-top: 8px; font-size: 0.85rem; }
+    .review-reply strong { color: var(--primary); }
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #ffffff; border-radius: 16px; padding: 30px;
+      max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4); border: 1px solid #e0e0e0;
+    }
+    .modal-box.wide { max-width: 850px; }
+    .modal-box h3 { margin-bottom: 20px; }
+    .modal-box .form-group { margin-bottom: 14px; }
+    .modal-box label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; color: var(--text-muted); }
+    .modal-box input, .modal-box textarea, .modal-box select {
+      width: 100%; padding: 8px 12px; border: 1px solid var(--border-light);
+      border-radius: 6px; font-size: 0.85rem; background: var(--bg-warm);
+    }
+    .modal-box textarea { min-height: 80px; resize: vertical; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .detail-item { background: #f5f0e8; padding: 10px 14px; border-radius: 8px; }
+    .detail-item .dl { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 600; }
+    .detail-item .dv { font-size: 0.95rem; color: #333; margin-top: 2px; font-weight: 500; }
+    .detail-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid #e0e0e0; }
+    .detail-section h4 { font-size: 0.95rem; margin-bottom: 10px; color: #4a6741; }
+    .detail-weight-chart { display: flex; gap: 3px; align-items: flex-end; height: 80px; padding: 8px 0; }
+    .detail-weight-bar { flex: 1; background: #4a6741; border-radius: 3px 3px 0 0; min-width: 6px; transition: all 0.3s; position: relative; }
+    .detail-weight-bar:hover { background: #d4a017; }
+    .detail-med-item { background: #f5f0e8; padding: 8px 12px; border-radius: 6px; margin-bottom: 6px; font-size: 0.8rem; }
+    .client-name-link { color: #4a6741; cursor: pointer; text-decoration: underline; font-weight: 700; }
+    .client-name-link:hover { color: #d4a017; }
+    .logout-btn {
+      background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.25); }
+    @media (max-width: 768px) {
+      .admin-header { flex-direction: column; gap: 12px; text-align: center; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .admin-tabs { overflow-x: auto; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <!-- Header -->
+    <div class="admin-header">
+      <div>
+        <h1>🛡️ Admin Dashboard <span class="badge">ADMIN</span></h1>
+        <p style="opacity:0.8; margin-top:4px;">VedTrim Platform Management</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span style="opacity:0.7; font-size:0.85rem;" id="adminTime"></span>
+        <button class="logout-btn" onclick="adminLogout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-num" id="statUsers">-</div><div class="stat-label">Total Clients</div></div>
+      <div class="stat-card"><div class="stat-num" id="statConsults">-</div><div class="stat-label">Consultations</div></div>
+      <div class="stat-card"><div class="stat-num" id="statReviews">-</div><div class="stat-label">Reviews</div></div>
+      <div class="stat-card"><div class="stat-num" id="statPayments">-</div><div class="stat-label">Payments</div></div>
+      <div class="stat-card"><div class="stat-num" id="statVaidyas">-</div><div class="stat-label">Vaidyas</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('clients')">👥 Clients</button>
+      <button class="admin-tab" onclick="switchTab('vaidyas')">👨‍⚕️ Vaidyas</button>
+      <button class="admin-tab" onclick="switchTab('reviews')">⭐ Reviews</button>
+      <button class="admin-tab" onclick="switchTab('consults')">📋 Consultations</button>
+      <button class="admin-tab" onclick="switchTab('payments')">💰 Payments</button>
+      <button class="admin-tab" onclick="switchTab('medicines')">💊 Medicines</button>
+    </div>
+
+    <!-- CLIENTS TAB -->
+    <div class="tab-content active" id="tab-clients">
+      <div class="admin-card">
+        <input type="text" class="search-bar" placeholder="🔍 Search clients by name, email, or plan..." oninput="filterClients(this.value)">
+        <div class="table-wrap">
+          <table class="data-table" id="clientsTable">
+            <thead>
+              <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Plan</th><th>Vaidya</th><th>Quiz</th><th>DOB</th><th>Joined</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="clientsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VAIDYAS TAB -->
+    <div class="tab-content" id="tab-vaidyas">
+      <div class="admin-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3>👨‍⚕️ Vaidya Management</h3>
+          <button class="btn-sm btn-reply" onclick="openAddVaidya()" style="padding:8px 16px;">➕ Add Vaidya</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Specialization</th><th>Qualification</th><th>Exp</th><th>Password</th><th>Active</th><th>Actions</th></tr></thead>
+            <tbody id="vaidyasBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS TAB -->
+    <div class="tab-content" id="tab-reviews">
+      <div class="admin-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3>⭐ User Reviews</h3>
+          <span style="font-size:0.85rem;color:var(--text-muted)" id="reviewCount"></span>
+        </div>
+        <div id="reviewsList"></div>
+      </div>
+    </div>
+
+    <!-- CONSULTS TAB -->
+    <div class="tab-content" id="tab-consults">
+      <div class="admin-card">
+        <h3>📋 Consultation Requests</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Preferred Time</th><th>Concern</th><th>Date</th></tr></thead>
+            <tbody id="consultsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS TAB -->
+    <div class="tab-content" id="tab-payments">
+      <div class="admin-card">
+        <h3>💰 Payment Records</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>User</th><th>Email</th><th>Plan</th><th>Amount</th><th>Method</th><th>Txn ID</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="paymentsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDICINES TAB -->
+    <div class="tab-content" id="tab-medicines">
+      <div class="admin-card">
+        <h3>💊 Prescribed Medicines</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Patient</th><th>Medicine</th><th>Dosage</th><th>Timing</th><th>Duration</th><th>Vaidya</th><th>Date</th></tr></thead>
+            <tbody id="medicinesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-box">
+      <h3 id="modalTitle">Edit Client</h3>
+      <form id="editForm"></form>
+      <div class="modal-actions">
+        <button class="btn-sm btn-save" onclick="handleModalSave()" style="padding:10px 24px;font-size:0.9rem;">💾 Save Changes</button>
+        <button class="btn-sm" onclick="closeModal()" style="padding:10px 24px;font-size:0.9rem;background:#95a5a6;color:white;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPLY MODAL -->
+  <div class="modal-overlay" id="replyModal">
+    <div class="modal-box">
+      <h3>💬 Reply to Review</h3>
+      <div class="form-group">
+        <label>Review by <strong id="replyReviewerName"></strong></label>
+        <p id="replyReviewText" style="color:var(--text-secondary);font-style:italic;margin:8px 0;"></p>
+      </div>
+      <div class="form-group">
+        <label>Admin Reply</label>
+        <textarea id="replyText" placeholder="Write your reply..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sm btn-reply" onclick="submitReply()" style="padding:10px 24px;font-size:0.9rem;">✅ Submit Reply</button>
+        <button class="btn-sm" onclick="closeReplyModal()" style="padding:10px 24px;font-size:0.9rem;background:#95a5a6;color:white;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT DETAIL MODAL -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-box wide">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h3 id="detailTitle">Client Details</h3>
+        <button class="btn-sm" onclick="closeDetailModal()" style="background:#95a5a6;color:white;padding:8px 16px;">✕ Close</button>
+      </div>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script>
+    // Check admin access
+    const adminUser = JSON.parse(localStorage.getItem('vedtrim_admin') || 'null');
+    if (!adminUser) { window.location.href = 'login.html'; }
+
+    // Update time
+    document.getElementById('adminTime').textContent = new Date().toLocaleString('en-IN');
+
+    let allClients = [];
+    let allReviews = [];
+    let allVaidyas = [];
+    let currentEditId = null;
+    let currentReplyId = null;
+
+    // ── Tab Switching ──
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // ── Load All Data ──
+    async function loadDashboard() {
+      try {
+        // Vaidyas
+        const { data: vaidyas } = await _sb.from('vaidyas').select('*').order('id');
+        allVaidyas = vaidyas || [];
+
+        // Users
+        const { data: users } = await _sb.from('users').select('*').order('created_at', { ascending: false });
+        allClients = users || [];
+        renderClients(allClients);
+        document.getElementById('statUsers').textContent = allClients.length;
+
+        // Consults
+        const { data: consults } = await _sb.from('consult_requests').select('*').order('requested_at', { ascending: false });
+        renderConsults(consults || []);
+        document.getElementById('statConsults').textContent = (consults || []).length;
+
+        // Reviews
+        const { data: reviews } = await _sb.from('reviews').select('*').order('created_at', { ascending: false });
+        allReviews = reviews || [];
+        renderReviews(allReviews);
+        document.getElementById('statReviews').textContent = allReviews.length;
+
+        // Payments — join with users via user_id
+        const { data: payments } = await _sb.from('payments').select('*').order('created_at', { ascending: false });
+        const paymentsEnriched = [];
+        for (const p of (payments || [])) {
+          if (p.user_id) {
+            const existing = allClients.find(u => u.id === p.user_id);
+            if (existing) { p._userName = existing.first_name + ' ' + existing.last_name; p._userEmail = existing.email; }
+            else { p._userName = p.user_name || 'Unknown'; p._userEmail = p.user_email || ''; }
+          } else { p._userName = p.user_name || 'Unknown'; p._userEmail = p.user_email || ''; }
+          paymentsEnriched.push(p);
+        }
+        renderPayments(paymentsEnriched);
+        document.getElementById('statPayments').textContent = paymentsEnriched.length;
+
+        // Medicines — join users + vaidyas via FKs
+        const { data: meds } = await _sb.from('prescribed_medicines').select('*').order('prescribed_at', { ascending: false });
+        const medsWithRefs = [];
+        for (const m of (meds || [])) {
+          const u = allClients.find(c => c.id === m.user_id);
+          m._user = u ? { first_name: u.first_name, last_name: u.last_name, email: u.email } : { first_name: 'Unknown', last_name: '', email: '' };
+          const v = allVaidyas.find(v => v.id === m.vaidya_id);
+          m._vaidyaName = v ? v.name : (m.vaidya_name || 'Unknown');
+          medsWithRefs.push(m);
+        }
+        renderMedicines(medsWithRefs);
+
+        // Render Vaidyas
+        renderVaidyas(allVaidyas);
+        document.getElementById('statVaidyas').textContent = allVaidyas.length;
+
+        // Load all review replies
+        const { data: allReplies } = await _sb.from('review_replies').select('*').order('created_at', { ascending: true });
+        window._allReplies = allReplies || [];
+      } catch (err) { console.error('Dashboard load error:', err); }
+    }
+
+    // ── Render Clients ──
+    function renderClients(clients) {
+      const tbody = document.getElementById('clientsBody');
+      tbody.innerHTML = clients.map((c, i) => {
+        const v = allVaidyas.find(v => v.id === c.assigned_vaidya_id);
+        const vName = v ? v.name : '<span style="color:#aaa;">—</span>';
+        return `
+        <tr>
+          <td>${i + 1}</td>
+          <td><span class="client-name-link" onclick="viewClientDetail(${c.id})">${c.first_name} ${c.last_name}</span></td>
+          <td>${c.email}</td>
+          <td>${c.phone || '-'}</td>
+          <td><span style="padding:3px 10px;border-radius:12px;font-size:0.75rem;font-weight:600;background:${c.plan === 'premium' ? '#f39c12' : '#3498db'};color:white;">${(c.plan || 'free').toUpperCase()}</span></td>
+          <td style="font-size:0.8rem;">${vName}</td>
+          <td>${c.quiz_completed ? '✅' : '❌'}</td>
+          <td>${c.dob || '-'}</td>
+          <td>${c.created_at ? new Date(c.created_at).toLocaleDateString('en-IN') : '-'}</td>
+          <td class="actions-cell">
+            <button class="btn-sm btn-edit" onclick="editClient(${c.id})">✏️ Edit</button>
+            <button class="btn-sm btn-delete" onclick="deleteClient(${c.id}, '${c.email}')">🗑️</button>
+          </td>
+        </tr>
+      `;
+      }).join('');
+    }
+
+    function filterClients(q) {
+      q = q.toLowerCase();
+      const filtered = allClients.filter(c =>
+        (c.first_name + ' ' + c.last_name + ' ' + c.email + ' ' + (c.plan || '')).toLowerCase().includes(q)
+      );
+      renderClients(filtered);
+    }
+
+    // ── Render Reviews (with multiple replies) ──
+    function renderReviews(reviews) {
+      document.getElementById('reviewCount').textContent = reviews.length + ' reviews';
+      document.getElementById('reviewsList').innerHTML = reviews.map(r => {
+        // Get all replies for this review
+        const replies = (window._allReplies || []).filter(rp => rp.review_id === r.id);
+        const repliesHtml = replies.map(rp => `
+          <div class="review-reply" style="margin-top:6px;">
+            <strong>🛡️ ${rp.reply_by_name}${rp.reply_by_type === 'admin' ? ' (VedTrim Team)' : ''}:</strong> ${rp.reply_text}
+            <span style="font-size:0.7rem;color:var(--text-muted);margin-left:8px;">${new Date(rp.created_at).toLocaleDateString('en-IN')}</span>
+          </div>
+        `).join('');
+        return `
+        <div class="review-card ${!r.is_visible ? 'hidden-review' : ''}">
+          <div class="review-header">
+            <div>
+              <strong>${r.user_name}</strong>
+              <span style="color:var(--text-muted);font-size:0.8rem;margin-left:8px;">${r.user_email}</span>
+              ${!r.is_visible ? '<span style="color:#e74c3c;font-size:0.75rem;margin-left:8px;">🚫 HIDDEN</span>' : ''}
+            </div>
+            <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+          </div>
+          <div class="review-text">${r.review_text}</div>
+          ${repliesHtml}
+          <div style="display:flex;gap:6px;margin-top:10px;">
+            <button class="btn-sm btn-reply" onclick="openReply(${r.id}, '${r.user_name.replace(/'/g, "\\'")}')">💬 Reply</button>
+            <button class="btn-sm btn-edit" onclick="toggleReviewVisibility(${r.id}, ${r.is_visible})">${r.is_visible ? '🚫 Hide' : '👁️ Show'}</button>
+            <button class="btn-sm btn-delete" onclick="deleteReview(${r.id})">🗑️ Delete</button>
+          </div>
+        </div>
+      `;
+      }).join('');
+    }
+
+    // ── Render Vaidyas ──
+    function renderVaidyas(vaidyas) {
+      document.getElementById('vaidyasBody').innerHTML = vaidyas.map(v => `
+        <tr>
+          <td><strong>#${v.id}</strong></td>
+          <td>${v.name}</td>
+          <td>${v.email || '-'}</td>
+          <td>${v.phone || '-'}</td>
+          <td>${v.specialization || '-'}</td>
+          <td>${v.qualification || '-'}</td>
+          <td>${v.experience_years || 0} yrs</td>
+          <td style="font-family:monospace;font-size:0.75rem;">${v.password_hash || '-'}</td>
+          <td>${v.active ? '<span style="color:#27ae60;">✅ Active</span>' : '<span style="color:#e74c3c;">❌</span>'}</td>
+          <td class="actions-cell">
+            <button class="btn-sm btn-edit" onclick="editVaidya(${v.id})">✏️ Edit</button>
+            <button class="btn-sm btn-delete" onclick="deleteVaidya(${v.id})">🗑️</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Render Consults ──
+    function renderConsults(consults) {
+      document.getElementById('consultsBody').innerHTML = consults.map((c, i) => `
+        <tr>
+          <td>${i + 1}</td><td>${c.name}</td><td>${c.email}</td><td>${c.phone || '-'}</td>
+          <td>${c.preferred_time || '-'}</td>
+          <td style="max-width:300px;white-space:normal;font-size:0.8rem;">${c.concern || '-'}</td>
+          <td>${c.requested_at ? new Date(c.requested_at).toLocaleDateString('en-IN') : '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Render Payments (using user_id FK join) ──
+    function renderPayments(payments) {
+      document.getElementById('paymentsBody').innerHTML = payments.map((p, i) => `
+        <tr>
+          <td>${i + 1}</td><td>${p._userName}</td><td>${p._userEmail}</td>
+          <td>${(p.plan || '').toUpperCase()}</td>
+          <td>₹${p.amount}</td><td>${p.payment_method}</td>
+          <td style="font-family:monospace;font-size:0.75rem;">${p.transaction_id}</td>
+          <td><span style="padding:3px 10px;border-radius:12px;font-size:0.7rem;font-weight:600;background:${p.status === 'confirmed' ? '#27ae60' : '#e74c3c'};color:white;">${p.status}</span></td>
+          <td>${p.created_at ? new Date(p.created_at).toLocaleDateString('en-IN') : '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Render Medicines (using vaidya_id FK join) ──
+    function renderMedicines(meds) {
+      document.getElementById('medicinesBody').innerHTML = meds.map((m, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${m._user.first_name} ${m._user.last_name}<br><span style="font-size:0.7rem;color:var(--text-muted);">${m._user.email}</span></td>
+          <td><strong>${m.medicine_name}</strong></td><td>${m.dosage}</td>
+          <td>${m.timing}</td><td>${m.duration}</td><td>${m._vaidyaName}</td>
+          <td>${m.prescribed_at ? new Date(m.prescribed_at).toLocaleDateString('en-IN') : '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Edit Client ──
+    function editClient(id) {
+      const client = allClients.find(c => c.id === id);
+      if (!client) return;
+      currentEditId = id;
+      document.getElementById('modalTitle').textContent = '✏️ Edit Client: ' + client.first_name + ' ' + client.last_name;
+      const vaidyaOpts = allVaidyas.map(v => `<option value="${v.id}" ${client.assigned_vaidya_id === v.id ? 'selected' : ''}>[ID:${v.id}] ${v.name} — ${v.specialization || ''}</option>`).join('');
+      document.getElementById('editForm').innerHTML = `
+        <div class="form-group"><label>First Name</label><input id="ef_first_name" value="${client.first_name || ''}"></div>
+        <div class="form-group"><label>Last Name</label><input id="ef_last_name" value="${client.last_name || ''}"></div>
+        <div class="form-group"><label>Email</label><input id="ef_email" value="${client.email || ''}" readonly style="opacity:0.6;"></div>
+        <div class="form-group"><label>Phone</label><input id="ef_phone" value="${client.phone || ''}"></div>
+        <div class="form-group"><label>Plan</label>
+          <select id="ef_plan"><option value="free" ${client.plan === 'free' ? 'selected' : ''}>Free</option><option value="basic" ${client.plan === 'basic' ? 'selected' : ''}>Basic</option><option value="premium" ${client.plan === 'premium' ? 'selected' : ''}>Premium</option></select>
+        </div>
+        <div class="form-group"><label>Assigned Vaidya</label>
+          <select id="ef_vaidya"><option value="">— No Vaidya —</option>${vaidyaOpts}</select>
+        </div>
+        <div class="form-group"><label>DOB</label><input type="date" id="ef_dob" value="${client.dob || ''}"></div>
+        <div class="form-group"><label>Gender</label>
+          <select id="ef_gender"><option value="">-</option><option value="male" ${client.gender === 'male' ? 'selected' : ''}>Male</option><option value="female" ${client.gender === 'female' ? 'selected' : ''}>Female</option><option value="other" ${client.gender === 'other' ? 'selected' : ''}>Other</option></select>
+        </div>
+        <div class="form-group"><label>Subscription End</label><input type="date" id="ef_sub_end" value="${client.subscription_end || ''}"></div>
+      `;
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    async function saveEdit() {
+      const vaidyaVal = document.getElementById('ef_vaidya').value;
+      const updates = {
+        first_name: document.getElementById('ef_first_name').value,
+        last_name: document.getElementById('ef_last_name').value,
+        phone: document.getElementById('ef_phone').value,
+        plan: document.getElementById('ef_plan').value,
+        assigned_vaidya_id: vaidyaVal ? parseInt(vaidyaVal) : null,
+        dob: document.getElementById('ef_dob').value || null,
+        gender: document.getElementById('ef_gender').value || null,
+        subscription_end: document.getElementById('ef_sub_end').value || null
+      };
+      await _sb.from('users').update(updates).eq('id', currentEditId);
+      closeModal();
+      loadDashboard();
+      alert('✅ Client updated!');
+    }
+
+    async function deleteClient(id, email) {
+      if (!confirm('⚠️ Delete client ' + email + '?')) return;
+      await _sb.from('users').delete().eq('id', id);
+      loadDashboard();
+    }
+
+    // ── Review Reply (multiple replies, no overwrite) ──
+    function openReply(id, name) {
+      currentReplyId = id;
+      document.getElementById('replyReviewerName').textContent = name;
+      document.getElementById('replyReviewText').textContent = '';
+      document.getElementById('replyText').value = '';
+      document.getElementById('replyModal').classList.add('active');
+    }
+
+    async function submitReply() {
+      const reply = document.getElementById('replyText').value.trim();
+      if (!reply) { alert('Please write a reply.'); return; }
+      // Insert into review_replies table (no overwrite)
+      await _sb.from('review_replies').insert({
+        review_id: currentReplyId,
+        reply_text: reply,
+        reply_by_name: 'VedTrim Team',
+        reply_by_type: 'admin'
+      });
+      closeReplyModal();
+      loadDashboard();
+      alert('✅ Reply posted!');
+    }
+
+    async function toggleReviewVisibility(id, currentState) {
+      await _sb.from('reviews').update({ is_visible: !currentState }).eq('id', id);
+      loadDashboard();
+    }
+
+    async function deleteReview(id) {
+      if (!confirm('⚠️ Delete this review permanently?')) return;
+      await _sb.from('reviews').delete().eq('id', id);
+      loadDashboard();
+    }
+
+    function handleModalSave() {
+      // Route to correct save based on which form is active
+      if (document.getElementById('vf_name')) {
+        saveVaidya();
+      } else {
+        saveEdit();
+      }
+    }
+
+    function closeModal() { document.getElementById('editModal').classList.remove('active'); }
+    function closeReplyModal() { document.getElementById('replyModal').classList.remove('active'); }
+    function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
+
+    // ── Vaidya CRUD ──
+    let editingVaidyaId = null;
+
+    function openAddVaidya() {
+      editingVaidyaId = null;
+      document.getElementById('modalTitle').textContent = '➕ Add New Vaidya';
+      document.getElementById('editForm').innerHTML = `
+        <div class="form-group"><label>Name *</label><input id="vf_name" placeholder="Dr. Full Name"></div>
+        <div class="form-group"><label>Email</label><input id="vf_email" type="email" placeholder="email@vedtrim.com"></div>
+        <div class="form-group"><label>Phone</label><input id="vf_phone" placeholder="+91 ..."></div>
+        <div class="form-group"><label>Specialization *</label><input id="vf_spec" placeholder="e.g. Medohar (Weight Management)"></div>
+        <div class="form-group"><label>Qualification</label><input id="vf_qual" placeholder="e.g. BAMS, MD (Ayurveda)"></div>
+        <div class="form-group"><label>Experience (years)</label><input id="vf_exp" type="number" value="0"></div>
+        <div class="form-group"><label>Login Password *</label><input id="vf_pass" placeholder="Unique login key for this vaidya"></div>
+        <div class="form-group"><label>Active</label><select id="vf_active"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+      `;
+      // Change save button to saveVaidya
+      const saveBtn = document.querySelector('#editModal .btn-sm.btn-reply[onclick="saveEdit()"]');
+      if (saveBtn) saveBtn.setAttribute('onclick', 'saveVaidya()');
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    function editVaidya(id) {
+      const v = allVaidyas.find(x => x.id === id);
+      if (!v) return;
+      editingVaidyaId = id;
+      document.getElementById('modalTitle').textContent = '✏️ Edit Vaidya: ' + v.name;
+      document.getElementById('editForm').innerHTML = `
+        <div class="form-group"><label>Vaidya ID</label><input value="#${v.id}" readonly style="opacity:0.6;"></div>
+        <div class="form-group"><label>Name *</label><input id="vf_name" value="${v.name || ''}"></div>
+        <div class="form-group"><label>Email</label><input id="vf_email" value="${v.email || ''}"></div>
+        <div class="form-group"><label>Phone</label><input id="vf_phone" value="${v.phone || ''}"></div>
+        <div class="form-group"><label>Specialization *</label><input id="vf_spec" value="${v.specialization || ''}"></div>
+        <div class="form-group"><label>Qualification</label><input id="vf_qual" value="${v.qualification || ''}"></div>
+        <div class="form-group"><label>Experience (years)</label><input id="vf_exp" type="number" value="${v.experience_years || 0}"></div>
+        <div class="form-group"><label>Login Password</label><input id="vf_pass" value="${v.password_hash || ''}"></div>
+        <div class="form-group"><label>Active</label><select id="vf_active"><option value="true" ${v.active ? 'selected' : ''}>Active</option><option value="false" ${!v.active ? 'selected' : ''}>Inactive</option></select></div>
+      `;
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    async function saveVaidya() {
+      const name = document.getElementById('vf_name').value.trim();
+      const pass = document.getElementById('vf_pass').value.trim();
+      if (!name) { alert('Name is required.'); return; }
+      if (!editingVaidyaId && !pass) { alert('Password is required for new vaidya.'); return; }
+
+      const data = {
+        name: name,
+        email: document.getElementById('vf_email').value.trim() || null,
+        phone: document.getElementById('vf_phone').value.trim() || null,
+        specialization: document.getElementById('vf_spec').value.trim() || null,
+        qualification: document.getElementById('vf_qual').value.trim() || null,
+        experience_years: parseInt(document.getElementById('vf_exp').value) || 0,
+        password_hash: pass || undefined,
+        active: document.getElementById('vf_active').value === 'true'
+      };
+      // Remove undefined
+      if (!data.password_hash) delete data.password_hash;
+
+      if (editingVaidyaId) {
+        await _sb.from('vaidyas').update(data).eq('id', editingVaidyaId);
+        alert('✅ Vaidya updated!');
+      } else {
+        data.password_hash = pass;
+        await _sb.from('vaidyas').insert(data);
+        alert('✅ Vaidya added!');
+      }
+      editingVaidyaId = null;
+      closeModal();
+      loadDashboard();
+    }
+
+    async function deleteVaidya(id) {
+      if (!confirm('⚠️ Delete this vaidya? Clients assigned to them will be unassigned.')) return;
+      // Unassign clients first
+      await _sb.from('users').update({ assigned_vaidya_id: null }).eq('assigned_vaidya_id', id);
+      await _sb.from('vaidyas').delete().eq('id', id);
+      loadDashboard();
+    }
+
+    // ── View Client Detail ──
+    async function viewClientDetail(id) {
+      const c = allClients.find(u => u.id === id);
+      if (!c) return;
+
+      document.getElementById('detailTitle').textContent = '👤 ' + c.first_name + ' ' + c.last_name;
+
+      // Fetch quiz data
+      const { data: quizRows } = await _sb.from('quiz_data').select('*').eq('user_id', id).limit(1);
+      const quiz = quizRows && quizRows[0] ? quizRows[0] : null;
+
+      // Fetch weights via user_id FK
+      const { data: weights } = await _sb.from('daily_weights').select('*').eq('user_id', id).order('log_date', { ascending: true });
+
+      // Fetch medicines
+      const { data: meds } = await _sb.from('prescribed_medicines').select('*').eq('user_id', id);
+
+      // Fetch payments via user_id FK
+      const { data: pays } = await _sb.from('payments').select('*').eq('user_id', id);
+
+      let html = `<div class="detail-grid">
+        <div class="detail-item"><div class="dl">Email</div><div class="dv">${c.email}</div></div>
+        <div class="detail-item"><div class="dl">Phone</div><div class="dv">${c.phone || '-'}</div></div>
+        <div class="detail-item"><div class="dl">Plan</div><div class="dv">${(c.plan || 'free').toUpperCase()}</div></div>
+        <div class="detail-item"><div class="dl">Gender</div><div class="dv">${c.gender || '-'}</div></div>
+        <div class="detail-item"><div class="dl">DOB</div><div class="dv">${c.dob || '-'}</div></div>
+        <div class="detail-item"><div class="dl">Subscription End</div><div class="dv">${c.subscription_end || '-'}</div></div>
+        <div class="detail-item"><div class="dl">Quiz Completed</div><div class="dv">${c.quiz_completed ? '✅ Yes' : '❌ No'}</div></div>
+        <div class="detail-item"><div class="dl">Joined</div><div class="dv">${c.created_at ? new Date(c.created_at).toLocaleDateString('en-IN') : '-'}</div></div>
+      </div>`;
+
+      // Quiz Data
+      if (quiz) {
+        html += `<div class="detail-section"><h4>📋 Quiz Data</h4><div class="detail-grid">
+          <div class="detail-item"><div class="dl">Height</div><div class="dv">${quiz.height_cm} cm</div></div>
+          <div class="detail-item"><div class="dl">Weight</div><div class="dv">${quiz.weight_kg} kg</div></div>
+          <div class="detail-item"><div class="dl">Goal Weight</div><div class="dv">${quiz.goal_weight_kg} kg</div></div>
+          <div class="detail-item"><div class="dl">BMI</div><div class="dv">${quiz.bmi}</div></div>
+          <div class="detail-item"><div class="dl">Prakriti</div><div class="dv">${quiz.prakriti || '-'}</div></div>
+          <div class="detail-item"><div class="dl">Agni</div><div class="dv">${quiz.agni || '-'}</div></div>
+          <div class="detail-item"><div class="dl">Sleep Quality</div><div class="dv">${quiz.sleep_quality || '-'}</div></div>
+          <div class="detail-item"><div class="dl">Stress Level</div><div class="dv">${quiz.stress_level || '-'}</div></div>
+          <div class="detail-item"><div class="dl">Diet Type</div><div class="dv">${quiz.diet_type || '-'}</div></div>
+          <div class="detail-item"><div class="dl">Exercise Level</div><div class="dv">${quiz.exercise_level || '-'}</div></div>
+        </div></div>`;
+      }
+
+      // Weight Chart
+      if (weights && weights.length > 0) {
+        const minW = Math.min(...weights.map(w => w.weight_kg));
+        const maxW = Math.max(...weights.map(w => w.weight_kg));
+        const range = maxW - minW || 1;
+        const bars = weights.map(w => {
+          const pct = ((w.weight_kg - minW) / range) * 100;
+          const h = 20 + pct * 0.6;
+          return `<div class="detail-weight-bar" style="height:${h}%" title="${w.log_date}: ${w.weight_kg} kg"></div>`;
+        }).join('');
+        html += `<div class="detail-section"><h4>📊 Weight History (${weights.length} entries)</h4>
+          <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-bottom:4px;"><span>Start: ${weights[0].weight_kg} kg</span><span>Latest: ${weights[weights.length-1].weight_kg} kg</span><span>Change: ${(weights[0].weight_kg - weights[weights.length-1].weight_kg).toFixed(1)} kg</span></div>
+          <div class="detail-weight-chart">${bars}</div>
+        </div>`;
+      }
+
+      // Medicines
+      if (meds && meds.length > 0) {
+        html += `<div class="detail-section"><h4>💊 Prescribed Medicines (${meds.length})</h4>`;
+        meds.forEach(m => {
+          const v = allVaidyas.find(v => v.id === m.vaidya_id);
+          const vName = v ? v.name : (m.vaidya_name || 'Unknown');
+          html += `<div class="detail-med-item"><strong>${m.medicine_name}</strong> — ${m.dosage} · ${m.timing} · ${m.duration}<br><span style="color:var(--text-muted);">by ${vName}</span></div>`;
+        });
+        html += `</div>`;
+      }
+
+      // Payments
+      if (pays && pays.length > 0) {
+        html += `<div class="detail-section"><h4>💰 Payments (${pays.length})</h4>`;
+        pays.forEach(p => {
+          html += `<div class="detail-med-item"><strong>₹${p.amount}</strong> — ${p.plan.toUpperCase()} · ${p.payment_method} · <span style="color:#27ae60;">${p.status}</span><br><span style="color:var(--text-muted);font-family:monospace;">${p.transaction_id}</span></div>`;
+        });
+        html += `</div>`;
+      }
+
+      document.getElementById('detailContent').innerHTML = html;
+      document.getElementById('detailModal').classList.add('active');
+    }
+
+    function adminLogout() {
+      localStorage.removeItem('vedtrim_admin');
+      window.location.href = 'login.html';
+    }
+
+    // ── Init ──
+    loadDashboard();
+  </script>
+</body>
+</html>

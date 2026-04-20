@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vaidya Login — VedTrim Admin</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card" style="max-width: 440px;">
+      <div class="auth-header">
+        <a href="index.html" class="nav-logo" style="justify-content: center; margin-bottom: var(--space-lg); font-size: 1.8rem;">
+          <div class="logo-icon" style="width: 44px; height: 44px; font-size: 1.4rem;">🌿</div>
+          Ved<span class="logo-highlight">Trim</span>
+        </a>
+        <div style="font-size: 2.5rem; margin-bottom: var(--space-sm);">👨‍⚕️</div>
+        <h1>Vaidya Portal</h1>
+        <p>Login to access patient dashboard</p>
+      </div>
+
+      <form id="vaidyaLoginForm" onsubmit="handleVaidyaLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="vaidyaPass">Admin Password</label>
+          <div class="input-group">
+            <input type="password" class="form-input" id="vaidyaPass" placeholder="Enter Vaidya password" required autocomplete="current-password">
+            <span class="input-icon toggle-password" id="togglePassword" title="Show password" role="button" tabindex="0" style="cursor: pointer; user-select: none;">👁️</span>
+          </div>
+        </div>
+
+        <div id="loginError" style="display: none; color: var(--error); font-size: 0.85rem; margin-bottom: var(--space-md); padding: 10px; background: rgba(231,76,60,0.08); border-radius: var(--radius-sm); text-align: center;"></div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">
+          Enter Vaidya Dashboard
+        </button>
+      </form>
+
+      <div class="auth-footer" style="margin-top: var(--space-xl);">
+        <a href="index.html" style="font-size: 0.85rem;">← Back to VedTrim</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Toggle password
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const input = document.getElementById('vaidyaPass');
+      if (input.type === 'password') { input.type = 'text'; this.textContent = '🙈'; }
+      else { input.type = 'password'; this.textContent = '👁️'; }
+    });
+
+    async function handleVaidyaLogin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('vaidyaPass').value;
+      const errorDiv = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+
+      errorDiv.style.display = 'none';
+      btn.textContent = 'Verifying...';
+      btn.disabled = true;
+
+      try {
+        // Try finding vaidya by password in DB
+        const { data: vaidyas } = await _sb.from('vaidyas').select('*').eq('password_hash', pass).eq('active', true);
+        if (vaidyas && vaidyas.length > 0) {
+          const v = vaidyas[0];
+          localStorage.setItem('vedtrim_vaidya_session', JSON.stringify({
+            loggedIn: true,
+            key: pass,
+            vaidyaId: v.id,
+            name: v.name,
+            email: v.email,
+            loginAt: new Date().toISOString()
+          }));
+          showToast('Welcome, ' + v.name + '! 👨‍⚕️', 'success');
+          setTimeout(() => window.location.href = 'vaidya-dashboard.html', 600);
+        } else {
+          errorDiv.textContent = 'Invalid password. Access denied.';
+          errorDiv.style.display = 'block';
+          btn.textContent = 'Enter Vaidya Dashboard';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Server error. Try again.';
+        errorDiv.style.display = 'block';
+        btn.textContent = 'Enter Vaidya Dashboard';
+        btn.disabled = false;
+      }
+    }
+
+    // Auto redirect if already logged in
+    const session = localStorage.getItem('vedtrim_vaidya_session');
+    if (session) {
+      const s = JSON.parse(session);
+      if (s.loggedIn) window.location.href = 'vaidya-dashboard.html';
+    }
+  </script>
+</body>
+</html>

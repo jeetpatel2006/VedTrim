@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment — Secure Checkout | VedTrim</title>
+  <meta name="description" content="Complete your VedTrim plan purchase securely via UPI, QR Code, or Bank Transfer.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <style>
+    .payment-page { padding: 100px 0 60px; min-height: 100vh; background: var(--bg-cream); }
+    .payment-container { max-width: 880px; margin: 0 auto; padding: 0 var(--space-lg); }
+    .payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); }
+    @media(max-width:768px) { .payment-grid { grid-template-columns: 1fr; } }
+
+    .order-summary {
+      background: white; border-radius: var(--radius-lg); padding: var(--space-2xl);
+      box-shadow: var(--shadow-md); border: 1px solid var(--border-light); height: fit-content;
+      position: sticky; top: 100px;
+    }
+    .order-summary h3 { margin-bottom: var(--space-lg); font-size: 1.1rem; }
+    .order-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 0.9rem; }
+    .order-row:last-child { border: none; }
+    .order-total { font-size: 1.3rem; font-weight: 800; color: var(--primary); padding-top: var(--space-md); }
+
+    .payment-methods {
+      background: white; border-radius: var(--radius-lg); padding: var(--space-2xl);
+      box-shadow: var(--shadow-md); border: 1px solid var(--border-light);
+    }
+
+    .method-tabs { display: flex; gap: 8px; margin-bottom: var(--space-xl); }
+    .method-tab {
+      flex: 1; padding: 14px 12px; border: 2px solid var(--border-light); border-radius: var(--radius-md);
+      background: white; cursor: pointer; text-align: center; font-size: 0.85rem; font-weight: 600;
+      transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .method-tab:hover { border-color: var(--primary); background: rgba(45,80,22,0.03); }
+    .method-tab.active { border-color: var(--primary); background: rgba(45,80,22,0.06); color: var(--primary); }
+    .method-tab .tab-icon { font-size: 1.4rem; }
+
+    .method-panel { display: none; }
+    .method-panel.active { display: block; }
+
+    .upi-box {
+      text-align: center; padding: var(--space-xl); background: rgba(253,248,240,0.5);
+      border-radius: var(--radius-md); border: 1px dashed var(--border-light);
+    }
+    .upi-id-display {
+      font-size: 1.1rem; font-weight: 700; background: white; padding: 14px 20px;
+      border-radius: var(--radius-md); border: 2px solid var(--primary); display: inline-flex;
+      align-items: center; gap: 10px; margin: var(--space-md) 0;
+    }
+    .copy-btn {
+      background: var(--primary); color: white; border: none; padding: 6px 14px;
+      border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer; font-weight: 600;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover { background: var(--primary-dark); }
+
+    .qr-container {
+      background: white; padding: var(--space-xl); border-radius: var(--radius-md);
+      display: inline-block; margin: var(--space-lg) 0; box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .qr-container img { width: 200px; height: 200px; }
+
+    .bank-details {
+      background: rgba(253,248,240,0.5); border-radius: var(--radius-md);
+      padding: var(--space-xl); border: 1px solid var(--border-light);
+    }
+    .bank-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+    .bank-row:last-child { border: none; }
+    .bank-label { color: var(--text-muted); font-size: 0.85rem; }
+    .bank-value { font-weight: 600; font-size: 0.9rem; }
+
+    .confirm-form { margin-top: var(--space-xl); }
+    .confirm-form .form-group { margin-bottom: var(--space-md); }
+
+    .payment-success {
+      text-align: center; padding: var(--space-3xl) var(--space-xl);
+      animation: fadeInUp 0.5s ease;
+    }
+    .payment-success .check-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, #27AE60, #2ECC71);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-lg); font-size: 2.5rem; color: white;
+      box-shadow: 0 8px 25px rgba(39,174,96,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🌿</div>Ved<span class="logo-highlight">Trim</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a><a href="about.html">Ayurveda?</a><a href="pricing.html">Pricing</a><a href="reviews.html">Reviews</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="consult.html" class="nav-consult-link">Consult</a><a href="medicines.html" class="nav-consult-link">Medicines</a><a href="index.html#seminar-booking" class="nav-seminar-link">🎓 Free Seminar</a>
+      </div>
+      <div class="nav-actions">
+        <a href="dashboard.html" class="btn btn-primary btn-sm nav-dash-btn" style="display:none;">Dashboard</a>
+        <a href="#" class="btn btn-outline btn-sm nav-logout-btn" style="display:none;">Logout</a>
+      </div>
+      <div class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <div class="payment-page">
+    <div class="payment-container">
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: var(--space-3xl);">
+        <span class="section-tag">🔒 Secure Checkout</span>
+        <h1 style="margin-top: var(--space-sm);">Complete Your Payment</h1>
+        <p style="color: var(--text-muted);">Choose your preferred payment method below</p>
+      </div>
+
+      <div class="payment-grid">
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+          <h3 style="margin-bottom: var(--space-md);">💳 Payment Method</h3>
+
+          <!-- Tabs -->
+          <div class="method-tabs">
+            <div class="method-tab active" onclick="switchMethod('upi')">
+              <span class="tab-icon">📱</span> UPI
+            </div>
+            <div class="method-tab" onclick="switchMethod('qr')">
+              <span class="tab-icon">📷</span> QR Code
+            </div>
+            <div class="method-tab" onclick="switchMethod('bank')">
+              <span class="tab-icon">🏦</span> Bank Transfer
+            </div>
+          </div>
+
+          <!-- UPI Panel -->
+          <div class="method-panel active" id="panel-upi">
+            <div class="upi-box">
+              <p style="font-weight: 600; margin-bottom: var(--space-sm);">Send payment to this UPI ID:</p>
+              <div class="upi-id-display">
+                <span id="upiId">vedtrim@ybl</span>
+                <button class="copy-btn" onclick="copyUPI()">📋 Copy</button>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: var(--space-md);">
+                Open any UPI app (Google Pay, PhonePe, Paytm) and send ₹<span class="pay-amount">3,499</span> to the above ID
+              </p>
+              <div style="display: flex; justify-content: center; gap: var(--space-lg); margin-top: var(--space-lg);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/200px-UPI-Logo-vector.svg.png" alt="UPI" style="height: 28px; opacity: 0.7;">
+              </div>
+            </div>
+          </div>
+
+          <!-- QR Code Panel -->
+          <div class="method-panel" id="panel-qr">
+            <div class="upi-box">
+              <p style="font-weight: 600; margin-bottom: var(--space-sm);">Scan QR Code to Pay</p>
+              <div class="qr-container">
+                <img id="qrImage" alt="UPI QR Code" style="image-rendering: pixelated;">
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">
+                Scan this QR code with any UPI app to pay ₹<span class="pay-amount">3,499</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Bank Transfer Panel -->
+          <div class="method-panel" id="panel-bank">
+            <div class="bank-details">
+              <p style="font-weight: 600; margin-bottom: var(--space-lg);">🏦 Bank Transfer Details</p>
+              <div class="bank-row"><span class="bank-label">Account Name</span><span class="bank-value">VedTrim Healthcare Pvt Ltd</span></div>
+              <div class="bank-row"><span class="bank-label">Account Number</span><span class="bank-value">9876543210123456</span></div>
+              <div class="bank-row"><span class="bank-label">IFSC Code</span><span class="bank-value">SBIN0001234</span></div>
+              <div class="bank-row"><span class="bank-label">Bank</span><span class="bank-value">State Bank of India</span></div>
+              <div class="bank-row"><span class="bank-label">Branch</span><span class="bank-value">Kudasan, Gandhinagar</span></div>
+              <div class="bank-row"><span class="bank-label">Amount</span><span class="bank-value" style="color: var(--primary);">₹<span class="pay-amount">3,499</span></span></div>
+            </div>
+          </div>
+
+          <!-- Confirm Payment Form -->
+          <div class="confirm-form" id="confirmForm">
+            <h4 style="margin-bottom: var(--space-md); font-size: 0.95rem;">✅ After payment, confirm below:</h4>
+            <div class="form-group">
+              <label class="form-label">Your Name *</label>
+              <input type="text" class="form-input" id="payName" placeholder="Full name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address *</label>
+              <input type="email" class="form-input" id="payEmail" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">UPI Transaction ID / Reference No.</label>
+              <input type="text" class="form-input" id="payTxnId" placeholder="e.g. 412345678901">
+            </div>
+            <button class="btn btn-primary btn-block btn-lg" id="confirmBtn" onclick="confirmPayment()">
+              ✅ Confirm Payment — ₹<span class="pay-amount">3,499</span>
+            </button>
+            <p style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: var(--space-sm);">
+              🔒 Your payment details are secure. A confirmation email will be sent to you.
+            </p>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <h3>🛒 Order Summary</h3>
+          <div style="text-align: center; margin-bottom: var(--space-lg);">
+            <div id="planBadge" style="display: inline-block; padding: 8px 24px; border-radius: var(--radius-xl); font-weight: 700; font-size: 1rem; background: var(--bg-gradient-hero); color: white;">
+              🌿 Basic Plan
+            </div>
+          </div>
+          <div class="order-row"><span>Plan</span><span id="summaryPlan" style="font-weight: 600;">Basic Plan</span></div>
+          <div class="order-row"><span>Duration</span><span>1 Month</span></div>
+          <div class="order-row"><span>1st Month Discount</span><span style="color: var(--success); font-weight: 600;">FREE ✨</span></div>
+          <div class="order-row"><span>Includes</span><span>Vaidya Consultation</span></div>
+          <div class="order-row order-total">
+            <span>Total</span>
+            <span id="summaryTotal">₹3,499</span>
+          </div>
+          <div style="margin-top: var(--space-lg); padding: var(--space-md); background: rgba(39,174,96,0.06); border-radius: var(--radius-md); border: 1px solid rgba(39,174,96,0.15);">
+            <p style="font-size: 0.82rem; color: var(--success); font-weight: 600; margin: 0;">🎉 First month is FREE! You'll only be charged from month 2.</p>
+          </div>
+          <div style="margin-top: var(--space-lg);">
+            <p style="font-size: 0.8rem; color: var(--text-muted);">📧 Confirmation email will be sent<br>📞 24/7 support: +91 98790 65567<br>❌ Cancel anytime — no fees</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Get plan from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedPlan = urlParams.get('plan') || 'basic';
+    const planConfig = {
+      basic: { name: 'Basic Plan', price: 3499, badge: '🌿 Basic Plan', color: 'var(--bg-gradient-hero)' },
+      premium: { name: 'Premium Plan', price: 5999, badge: '👑 Premium Plan', color: 'var(--bg-gradient-gold)' }
+    };
+    const plan = planConfig[selectedPlan] || planConfig.basic;
+
+    // Update UI
+    document.getElementById('planBadge').textContent = plan.badge;
+    document.getElementById('planBadge').style.background = plan.color;
+    if (selectedPlan === 'premium') document.getElementById('planBadge').style.color = 'var(--primary-dark)';
+    document.getElementById('summaryPlan').textContent = plan.name;
+    document.getElementById('summaryTotal').textContent = '₹' + plan.price.toLocaleString('en-IN');
+    document.querySelectorAll('.pay-amount').forEach(el => el.textContent = plan.price.toLocaleString('en-IN'));
+
+    // Generate UPI QR Code
+    const upiUrl = `upi://pay?pa=vedtrim@ybl&pn=VedTrim&am=${plan.price}&cu=INR&tn=${encodeURIComponent(plan.name + ' - VedTrim')}`;
+    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+
+    // Auto-fill if logged in
+    const user = VedTrimDB.getCurrentUser();
+    if (user) {
+      document.getElementById('payName').value = (user.firstName || '') + ' ' + (user.lastName || '');
+      document.getElementById('payEmail').value = user.email || '';
+    }
+
+    // Switch tabs
+    function switchMethod(method) {
+      document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.method-panel').forEach(p => p.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById('panel-' + method).classList.add('active');
+    }
+
+    // Copy UPI
+    function copyUPI() {
+      navigator.clipboard.writeText('vedtrim@ybl');
+      const btn = event.target;
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => btn.textContent = '📋 Copy', 2000);
+      showToast('UPI ID copied to clipboard!', 'success');
+    }
+
+    // Confirm payment
+    async function confirmPayment() {
+      const name = document.getElementById('payName').value.trim();
+      const email = document.getElementById('payEmail').value.trim();
+      const btn = document.getElementById('confirmBtn');
+
+      if (!name || !email) {
+        showToast('Please fill in your name and email.', 'error');
+        return;
+      }
+
+      btn.textContent = 'Processing...';
+      btn.disabled = true;
+
+      // Determine active payment method
+      const activeTab = document.querySelector('.method-tab.active');
+      const method = activeTab.textContent.trim().toLowerCase().includes('upi') ? 'UPI'
+                   : activeTab.textContent.trim().toLowerCase().includes('qr') ? 'QR Code'
+                   : 'Bank Transfer';
+
+      try {
+        const data = await VedTrimDB.processPayment({
+            name: name,
+            email: email,
+            plan: selectedPlan,
+            method: method,
+            txnId: document.getElementById('payTxnId').value.trim()
+          });
+
+        if (data.success) {
+          // Update local user session
+          if (user) {
+            user.plan = selectedPlan;
+            localStorage.setItem('vedtrim_session_user', JSON.stringify(user));
+          }
+
+          triggerConfetti();
+
+          // Show success
+          document.querySelector('.payment-methods').innerHTML = `
+            <div class="payment-success">
+              <div class="check-circle">✓</div>
+              <h2 style="color: var(--primary); margin-bottom: var(--space-sm);">Payment Confirmed!</h2>
+              <p style="color: var(--text-muted); margin-bottom: var(--space-lg);">Transaction ID: <strong>${data.transactionId}</strong></p>
+              <div style="background: rgba(39,174,96,0.06); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-xl); text-align: left; font-size: 0.9rem;">
+                <p style="margin-bottom: 8px;">📧 Confirmation email sent to <strong>${email}</strong></p>
+                <p style="margin-bottom: 8px;">📋 Plan: <strong>${plan.name}</strong></p>
+                <p style="margin-bottom: 8px;">💰 Amount: <strong>₹${plan.price.toLocaleString('en-IN')}</strong></p>
+                <p style="margin: 0;">🎉 First month is FREE!</p>
+              </div>
+              <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                <a href="dashboard.html" class="btn btn-primary btn-lg">🏠 Go to Dashboard</a>
+                <a href="quiz.html" class="btn btn-outline btn-lg">📋 Take Health Quiz</a>
+              </div>
+            </div>
+          `;
+        } else {
+          showToast(data.message || 'Payment processing failed. Please try again.', 'error');
+          btn.textContent = '✅ Confirm Payment — ₹' + plan.price.toLocaleString('en-IN');
+          btn.disabled = false;
+        }
+      } catch (err) {
+        showToast('Server error. Please try again.', 'error');
+        btn.textContent = '✅ Confirm Payment — ₹' + plan.price.toLocaleString('en-IN');
+        btn.disabled = false;
+      }
+    }
+  </script>
+  <script src="chatbot.js"></script>
+</body>
+</html>

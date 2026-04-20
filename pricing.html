@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — Ayurvedic Weight Loss Plans | VedTrim</title>
+  <meta name="description" content="Affordable Ayurvedic weight loss plans starting at ₹3,499/month. First month FREE. Expert Vaidya consultations, custom herbal formulations with medicines included, doorstep delivery.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🌿</div>Ved<span class="logo-highlight">Trim</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a><a href="about.html">Ayurveda?</a><a href="pricing.html" class="active">Pricing</a><a href="reviews.html">Reviews</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="consult.html" class="nav-consult-link">Consult</a><a href="medicines.html" class="nav-consult-link">Medicines</a><a href="index.html#seminar-booking" class="nav-seminar-link">🎓 Free Seminar</a>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline btn-sm nav-auth-btn">Log In</a>
+        <a href="signup.html" class="btn btn-primary btn-sm nav-auth-btn">Get Started</a>
+        <a href="dashboard.html" class="btn btn-primary btn-sm nav-dash-btn" style="display:none;">Dashboard</a>
+        <a href="#" class="btn btn-outline btn-sm nav-logout-btn" style="display:none;">Logout</a>
+      </div>
+      <div class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <h1>Simple, Transparent Pricing</h1>
+    <p>Your first month is FREE on all plans. Cancel anytime — no commitments, no hidden fees.</p>
+  </section>
+
+  <!-- Pricing Cards -->
+  <section class="section">
+    <div class="container" style="max-width: 950px;">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">Choose Your Plan</span>
+        <h2>Start Your Ayurvedic Journey</h2>
+        <p>Both plans include a personalised Vaidya consultation and custom herbal treatment plan.</p>
+      </div>
+
+      <div class="grid grid-2" style="gap: var(--space-2xl);" id="pricingGrid">
+        <!-- Basic Plan -->
+        <div class="pricing-card animate-on-scroll delay-1" id="basicPlan" onclick="selectPlan('basic')">
+          <div class="pricing-plan-name">Basic Plan</div>
+          <div class="pricing-amount">
+            <span class="currency">₹</span>3,499<span class="period">/month</span>
+          </div>
+          <div class="pricing-free-badge">🎉 1st Month FREE!</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Expert Vaidya consultation</li>
+            <li><span class="check">✓</span> Custom herbal formulations prescribed</li>
+            <li><span class="check">✓</span> <strong>Ayurvedic medicines included</strong></li>
+            <li><span class="check">✓</span> Chat support</li>
+            <li><span class="check">✓</span> Medicines delivered to doorstep</li>
+            <li><span class="check">✓</span> 24/7 care team access</li>
+            <li><span class="check">✓</span> Monthly Vaidya video calls</li>
+          </ul>
+          <a href="payment.html?plan=basic" class="btn btn-outline btn-block btn-lg" id="basicBtn">Select Basic Plan</a>
+          <p class="pricing-tc-link">* <a href="#termsSection" class="tc-link">Terms & Conditions</a> apply</p>
+        </div>
+
+        <!-- Premium Plan -->
+        <div class="pricing-card featured animate-on-scroll delay-2" id="premiumPlan" onclick="selectPlan('premium')">
+          <div class="pricing-plan-name">Premium Plan</div>
+          <div class="pricing-amount">
+            <span class="currency">₹</span>5,999<span class="period">/month</span>
+          </div>
+          <div class="pricing-free-badge">🎉 1st Month FREE!</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Everything in Basic</li>
+            <li><span class="check">✓</span> <strong>Ayurvedic medicines included</strong></li>
+            <li><span class="check">✓</span> Combination therapy options</li>
+            <li><span class="check">✓</span> Weekly Vaidya video calls</li>
+            <li><span class="check">✓</span> Metabolic testing included</li>
+            <li><span class="check">✓</span> Medicines delivered to doorstep</li>
+            <li><span class="check">✓</span> Same-day priority shipping</li>
+            <li><span class="check">✓</span> 24/7 care team access</li>
+          </ul>
+          <a href="payment.html?plan=premium" class="btn btn-primary btn-block btn-lg" id="premiumBtn">Select Premium Plan</a>
+          <p class="pricing-tc-link">* <a href="#termsSection" class="tc-link">Terms & Conditions</a> apply</p>
+        </div>
+      </div>
+
+      <!-- Terms & Conditions -->
+      <div class="terms-note animate-on-scroll" id="termsSection" style="margin-top: var(--space-3xl);">
+        <strong>📋 Terms & Conditions:</strong><br>
+        <ul style="margin-top: var(--space-sm); padding-left: var(--space-lg);">
+          <li style="padding: 4px 0; list-style: disc; color: var(--text-medium);">Your first month is completely FREE on all plans. After the free trial, charges of ₹3,499/month (Basic) or ₹5,999/month (Premium) will apply.</li>
+          <li style="padding: 4px 0; list-style: disc; color: var(--text-medium);"><strong>Plans can be cancelled at any time</strong>, however <strong>no refund will be issued for the ongoing/current billing period</strong>.</li>
+          <li style="padding: 4px 0; list-style: disc; color: var(--text-medium);"><strong>Ayurvedic medicines are included</strong> in both Basic and Premium plan subscriptions.</li>
+          <li style="padding: 4px 0; list-style: disc; color: var(--text-medium);">All prices are in Indian Rupees (₹/INR) and inclusive of applicable taxes.</li>
+          <li style="padding: 4px 0; list-style: disc; color: var(--text-medium);">VedTrim reserves the right to modify pricing with 30 days prior notice to subscribers.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table -->
+  <section class="section section-cream">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">Plan Details</span>
+        <h2>Compare Plans</h2>
+      </div>
+      <div class="card animate-on-scroll" style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-light);">
+              <th style="text-align: left; padding: 14px;">Feature</th>
+              <th style="text-align: center; padding: 14px; color: var(--primary);">Basic ₹3,499</th>
+              <th style="text-align: center; padding: 14px; color: var(--accent-dark);">Premium ₹5,999</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">First Month Free</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Vaidya Consultation</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Custom Herbal Formulation</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Chat Support</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Doorstep Medicine Delivery</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">24/7 Care Team</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Vaidya Video Calls</td>
+              <td style="text-align: center; padding: 12px;">Monthly</td>
+              <td style="text-align: center; padding: 12px; font-weight: 600; color: var(--accent-dark);">Weekly</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Combination Therapy</td>
+              <td style="text-align: center; padding: 12px; color: var(--text-muted);">✗</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Medicines Included</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-light);">
+              <td style="padding: 12px 14px;">Metabolic Testing</td>
+              <td style="text-align: center; padding: 12px; color: var(--text-muted);">✗</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">✓</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 14px;">Priority Shipping</td>
+              <td style="text-align: center; padding: 12px; color: var(--text-muted);">✗</td>
+              <td style="text-align: center; padding: 12px; color: var(--success);">Same-day</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container container-narrow">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">Pricing Questions</span>
+        <h2>Pricing FAQ</h2>
+      </div>
+      <div class="animate-on-scroll">
+        <div class="faq-item">
+          <div class="faq-question">What does "1st Month Free" mean? <span class="faq-icon">▼</span></div>
+          <div class="faq-answer"><p>When you sign up, your first month of consultation and care team access is completely free. You won't be charged until your second month begins. This applies to both Basic and Premium plans.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Are medicine costs included? <span class="faq-icon">▼</span></div>
+          <div class="faq-answer"><p>No, medicine prices are billed separately. Your plan covers Vaidya consultations, care team access, and program management. The prescribed Ayurvedic medicines are charged based on your personalised formulation, typically ranging from ₹500-₹2,000/month.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I cancel anytime? <span class="faq-icon">▼</span></div>
+          <div class="faq-answer"><p>Absolutely! You can cancel your plan at any time with no cancellation fees. There are no long-term contracts or commitments. Simply contact our support team at support@vedtrim.com or call +91 98790 65567.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I switch plans? <span class="faq-icon">▼</span></div>
+          <div class="faq-answer"><p>Yes, you can upgrade or downgrade your plan at any time. Changes will take effect from your next billing cycle. Contact our support team to make the switch.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo"><div class="logo-icon">🌿</div>Ved<span class="logo-highlight">Trim</span></a>
+          <p style="margin-top: var(--space-md);">Ancient Ayurvedic wisdom meets modern weight loss science. Transform your body naturally.</p>
+        </div>
+        <div class="footer-col"><h4>Quick Links</h4><a href="about.html">Why Ayurveda</a><a href="pricing.html">Pricing</a><a href="reviews.html">Reviews</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></div>
+        <div class="footer-col"><h4>Programs</h4><a href="pricing.html">Basic Plan</a><a href="pricing.html">Premium Plan</a><a href="quiz.html">Health Quiz</a><a href="signup.html">Get Started</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="mailto:support@vedtrim.com">📧 support@vedtrim.com</a><a href="tel:+919879065567">📞 +91 98790 65567</a><a>📍 Kudasan, Gandhinagar</a><a>Gujarat, India</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 VedTrim. All rights reserved.</p>
+        <div class="footer-social"><a href="#">📘</a><a href="#">📸</a><a href="#">🐦</a><a href="#">📺</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop">↑</button>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    initFAQ();
+
+    function selectPlan(plan) {
+      // Remove previous selection
+      document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected'));
+
+      // Add selection
+      const card = document.getElementById(plan === 'basic' ? 'basicPlan' : 'premiumPlan');
+      card.classList.add('selected');
+
+      // Trigger confetti
+      triggerConfetti();
+
+      // Save selection
+      const user = VedTrimDB.getCurrentUser();
+      if (user) {
+        VedTrimDB.saveSelectedPlan(user.email, plan);
+        showToast(`${plan === 'basic' ? 'Basic' : 'Premium'} Plan selected! 🎉`, 'success');
+      } else {
+        showToast(`${plan === 'basic' ? 'Basic' : 'Premium'} Plan selected! Sign up to get started.`, 'info');
+      }
+    }
+
+    // Check if user already has a plan selected
+    const user = VedTrimDB.getCurrentUser();
+    if (user && user.plan) {
+      const card = document.getElementById(user.plan === 'basic' ? 'basicPlan' : 'premiumPlan');
+      if (card) card.classList.add('selected');
+    }
+  </script>
+  <script src="chatbot.js"></script>
+</body>
+</html>

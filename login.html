@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In — VedTrim</title>
+  <meta name="description" content="Log in to your VedTrim account to access your Ayurvedic weight loss dashboard.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="index.html" class="nav-logo" style="justify-content: center; margin-bottom: var(--space-lg); font-size: 1.8rem;">
+          <div class="logo-icon" style="width: 44px; height: 44px; font-size: 1.4rem;">🌿</div>
+          Ved<span class="logo-highlight">Trim</span>
+        </a>
+        <h1>Welcome Back</h1>
+        <p>Log in to your Ayurvedic wellness journey</p>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email Address</label>
+          <input type="text" class="form-input" id="loginEmail" placeholder="your@email.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <div class="input-group">
+            <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+            <span class="input-icon toggle-password" id="togglePassword" title="Show password" role="button" tabindex="0" style="cursor: pointer; user-select: none;">👁️</span>
+          </div>
+        </div>
+
+        <div id="loginError" style="display: none; color: var(--error); font-size: 0.85rem; margin-bottom: var(--space-md); padding: 10px; background: rgba(231,76,60,0.08); border-radius: var(--radius-sm); text-align: center;"></div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">Log In</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="signup.html">Sign Up Free</a>
+      </div>
+
+      <div style="text-align: center; margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--border-light);">
+        <a href="vaidya-login.html" style="font-size: 0.82rem; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;"
+           onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
+          👨‍⚕️ Vaidya Portal Login
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Initialize password toggle
+    initPasswordToggle();
+
+    document.getElementById('togglePassword').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errorDiv = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+
+      errorDiv.style.display = 'none';
+
+      if (!email || !password) {
+        errorDiv.textContent = 'Please fill in all fields.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      btn.textContent = 'Logging in...';
+      btn.disabled = true;
+
+      // Admin login check
+      if (email === 'Admin' && password === 'Admin') {
+        localStorage.setItem('vedtrim_admin', JSON.stringify({ role: 'admin', loginAt: new Date().toISOString() }));
+        showToast('Welcome, Admin! 🛡️', 'success');
+        setTimeout(() => { window.location.href = 'admin.html'; }, 800);
+        return;
+      }
+
+      const result = await VedTrimDB.login(email, password);
+
+      if (result.success) {
+        showToast('Login successful! Welcome back. 🌿', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 800);
+      } else {
+        errorDiv.textContent = result.message;
+        errorDiv.style.display = 'block';
+        btn.textContent = 'Log In';
+        btn.disabled = false;
+
+        const card = document.querySelector('.auth-card');
+        card.style.animation = 'none';
+        card.offsetHeight;
+        card.style.animation = 'shake 0.5s ease';
+      }
+    }
+
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-10px); }
+        40% { transform: translateX(10px); }
+        60% { transform: translateX(-6px); }
+        80% { transform: translateX(6px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Redirect if already logged in
+    if (VedTrimDB.isLoggedIn()) {
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

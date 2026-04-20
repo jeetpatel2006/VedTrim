@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vaidya Dashboard — VedTrim Admin</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <style>
+    :root { --sidebar-w: 340px; }
+
+    .vaidya-layout {
+      display: flex;
+      min-height: 100vh;
+      padding-top: 72px;
+    }
+
+    /* ── Sidebar ── */
+    .vaidya-sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: white;
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 72px);
+      position: sticky;
+      top: 72px;
+    }
+
+    .sidebar-header {
+      padding: var(--space-lg);
+      border-bottom: 1px solid var(--border-light);
+      background: linear-gradient(135deg, rgba(45,80,22,0.04), rgba(212,168,67,0.04));
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.1rem;
+      margin-bottom: var(--space-sm);
+    }
+
+    .sidebar-search {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      background: white;
+      transition: border-color 0.2s;
+    }
+
+    .sidebar-search:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(45,80,22,0.08);
+    }
+
+    .sidebar-stats {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+      font-size: 0.78rem;
+    }
+
+    .stat-pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-xl);
+      font-weight: 600;
+    }
+
+    .client-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-sm);
+    }
+
+    .client-item {
+      padding: 14px var(--space-md);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      border: 1px solid transparent;
+      margin-bottom: 4px;
+    }
+
+    .client-item:hover {
+      background: rgba(45,80,22,0.04);
+      border-color: var(--border-light);
+    }
+
+    .client-item.active {
+      background: linear-gradient(135deg, rgba(45,80,22,0.08), rgba(212,168,67,0.06));
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(45,80,22,0.08);
+    }
+
+    .client-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .client-meta { flex: 1; min-width: 0; }
+    .client-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .client-email { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .client-badge {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-xl);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ── Main Content ── */
+    .vaidya-main {
+      flex: 1;
+      padding: var(--space-2xl);
+      background: var(--bg-cream);
+      overflow-y: auto;
+    }
+
+    .detail-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+
+    .detail-section h3 {
+      font-size: 1rem;
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-sm);
+      border-bottom: 2px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .info-item {
+      padding: 12px 16px;
+      background: rgba(253,248,240,0.5);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+    }
+
+    .info-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+
+    /* Video call button */
+    .btn-video-call {
+      background: linear-gradient(135deg, #2D5016, #4A7C28);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(45,80,22,0.3);
+    }
+
+    .btn-video-call:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(45,80,22,0.4);
+    }
+
+    .btn-video-call .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: #4ADE80;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-4xl);
+      color: var(--text-muted);
+    }
+
+    .empty-state .icon { font-size: 4rem; margin-bottom: var(--space-lg); }
+
+    /* Quiz answer tags */
+    .quiz-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(45,80,22,0.06);
+      border: 1px solid rgba(45,80,22,0.12);
+      border-radius: var(--radius-xl);
+      font-size: 0.8rem;
+      margin: 3px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .vaidya-layout { flex-direction: column; }
+      .vaidya-sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        max-height: 300px;
+        position: relative;
+        top: 0;
+      }
+      .vaidya-main { padding: var(--space-lg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" style="position: fixed; top: 0; left: 0; right: 0; z-index: 100;">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🌿</div>Ved<span class="logo-highlight">Trim</span>
+        <span style="font-size: 0.7rem; background: var(--bg-gradient-hero); color: white; padding: 2px 10px; border-radius: var(--radius-xl); margin-left: 8px; font-weight: 600;">VAIDYA</span>
+      </a>
+      <div class="nav-actions">
+        <span id="vaidyaNameNav" style="font-size: 0.85rem; color: var(--text-muted); margin-right: var(--space-md);">👨‍⚕️ Vaidya</span>
+        <a href="#" class="btn btn-outline btn-sm" onclick="vaidyaLogout(event)">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Layout -->
+  <div class="vaidya-layout">
+    <!-- Sidebar: Client List -->
+    <div class="vaidya-sidebar">
+      <div class="sidebar-header">
+        <h2>👥 My Clients</h2>
+        <input type="text" class="sidebar-search" id="clientSearch" placeholder="🔍 Search by name or email..." oninput="filterClients()">
+        <div class="sidebar-stats">
+          <span class="stat-pill" style="background: rgba(45,80,22,0.08); color: var(--primary);" id="totalClients">0 Clients</span>
+          <span class="stat-pill" style="background: rgba(39,174,96,0.08); color: var(--success);" id="quizDone">0 Quiz Done</span>
+          <span class="stat-pill" style="background: rgba(212,168,67,0.08); color: var(--accent-dark);" id="premiumCount">0 Premium</span>
+        </div>
+      </div>
+      <div class="client-list" id="clientList">
+        <div class="empty-state" style="padding: var(--space-2xl);">
+          <div style="font-size: 2rem;">⏳</div>
+          <p style="font-size: 0.85rem;">Loading clients...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main: Client Detail -->
+    <div class="vaidya-main" id="mainContent">
+      <div class="empty-state">
+        <div class="icon">👈</div>
+        <h2 style="margin-bottom: var(--space-sm);">Select a Client</h2>
+        <p>Choose a client from the list to view their profile, quiz data, and weight progress.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // ── Auth Check ──
+    const session = JSON.parse(localStorage.getItem('vedtrim_vaidya_session') || 'null');
+    if (!session || !session.loggedIn) {
+      window.location.href = 'vaidya-login.html';
+    }
+
+    const VAIDYA_ID = session?.vaidyaId || null;
+    const VAIDYA_NAME = session?.name || 'Vaidya';
+    let allClients = [];
+    let selectedClientId = null;
+
+    // Set navbar name
+    document.getElementById('vaidyaNameNav').textContent = '👨‍⚕️ ' + VAIDYA_NAME;
+
+    // ── Logout ──
+    function vaidyaLogout(e) {
+      e.preventDefault();
+      localStorage.removeItem('vedtrim_vaidya_session');
+      window.location.href = 'vaidya-login.html';
+    }
+
+    // ── Fetch Assigned Clients ──
+    async function loadClients() {
+      try {
+        const data = await VedTrimDB.getAllUsers(null, VAIDYA_ID);
+        if (data.success) {
+          allClients = data.users;
+          renderClientList(allClients);
+          updateStats(allClients);
+        } else {
+          document.getElementById('clientList').innerHTML = `
+            <div class="empty-state" style="padding: var(--space-xl);"><p style="color: var(--error);">❌ ${data.message}</p></div>`;
+        }
+      } catch (err) {
+        document.getElementById('clientList').innerHTML = `
+          <div class="empty-state" style="padding: var(--space-xl);"><p style="color: var(--error);">❌ Server error. Check connection.</p></div>`;
+      }
+    }
+
+    // ── Stats ──
+    function updateStats(clients) {
+      document.getElementById('totalClients').textContent = clients.length + ' Clients';
+      document.getElementById('quizDone').textContent = clients.filter(c => c.quizCompleted).length + ' Quiz Done';
+      document.getElementById('premiumCount').textContent = clients.filter(c => c.plan === 'premium').length + ' Premium';
+    }
+
+    // ── Render Client List ──
+    const avatarColors = ['#2D5016','#D4A843','#E74C3C','#3498DB','#9B59B6','#F39C12','#27AE60','#E67E22'];
+
+    function renderClientList(clients) {
+      const list = document.getElementById('clientList');
+      if (clients.length === 0) {
+        list.innerHTML = `<div class="empty-state" style="padding: var(--space-xl);"><div style="font-size: 2rem;">🔍</div><p style="font-size: 0.85rem;">No clients found</p></div>`;
+        return;
+      }
+      list.innerHTML = clients.map((c, i) => {
+        const initials = (c.firstName[0] + (c.lastName ? c.lastName[0] : '')).toUpperCase();
+        const color = avatarColors[i % avatarColors.length];
+        const planBadge = c.plan === 'premium'
+          ? '<span class="client-badge" style="background: rgba(212,168,67,0.15); color: #B8860B;">👑 Premium</span>'
+          : c.plan === 'basic'
+          ? '<span class="client-badge" style="background: rgba(45,80,22,0.08); color: var(--primary);">🌿 Basic</span>'
+          : '<span class="client-badge" style="background: rgba(0,0,0,0.05); color: var(--text-muted);">No Plan</span>';
+        const quizIcon = c.quizCompleted ? '✅' : '⏳';
+        return `
+          <div class="client-item ${selectedClientId === c.id ? 'active' : ''}" onclick="selectClient(${c.id})">
+            <div class="client-avatar" style="background: ${color};">${initials}</div>
+            <div class="client-meta">
+              <div class="client-name">${quizIcon} ${c.firstName} ${c.lastName}</div>
+              <div class="client-email">${c.email}</div>
+            </div>
+            ${planBadge}
+          </div>`;
+      }).join('');
+    }
+
+    // ── Filter / Search ──
+    function filterClients() {
+      const q = document.getElementById('clientSearch').value.toLowerCase();
+      const filtered = allClients.filter(c =>
+        (c.firstName + ' ' + c.lastName).toLowerCase().includes(q) ||
+        c.email.toLowerCase().includes(q)
+      );
+      renderClientList(filtered);
+    }
+
+    // ── Select Client ──
+    function selectClient(id) {
+      selectedClientId = id;
+      const client = allClients.find(c => c.id === id);
+      if (!client) return;
+
+      // Highlight in sidebar
+      document.querySelectorAll('.client-item').forEach(el => el.classList.remove('active'));
+      event?.target?.closest?.('.client-item')?.classList.add('active');
+      renderClientList(allClients.filter(c => {
+        const q = document.getElementById('clientSearch').value.toLowerCase();
+        return !q || (c.firstName + ' ' + c.lastName).toLowerCase().includes(q) || c.email.toLowerCase().includes(q);
+      }));
+
+      // Render detail
+      renderClientDetail(client);
+    }
+
+    // ── Render Client Detail ──
+    function renderClientDetail(c) {
+      const qd = c.quizData || {};
+      const main = document.getElementById('mainContent');
+
+      // Calculate age from DOB
+      let ageStr = '—';
+      if (qd.dob) {
+        const dob = new Date(qd.dob);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+        ageStr = age + ' years';
+      }
+
+      // Subscription end date
+      let subEnd = '—';
+      if (c.plan && c.createdAt) {
+        const d = new Date(c.createdAt);
+        d.setMonth(d.getMonth() + 2);
+        subEnd = d.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+
+      const genderMap = { male: 'Male', female: 'Female', other: 'Prefer not to say' };
+      const planMap = { premium: '👑 Premium', basic: '🌿 Basic' };
+
+      // BMI
+      let bmi = qd.bmi || (qd.weight && qd.height ? (qd.weight / ((qd.height/100)**2)).toFixed(1) : null);
+      let bmiColor = '#8A8A8A', bmiLabel = '—';
+      if (bmi) {
+        bmi = parseFloat(bmi);
+        if (bmi < 18.5) { bmiColor = '#3498DB'; bmiLabel = 'Underweight'; }
+        else if (bmi < 25) { bmiColor = '#27AE60'; bmiLabel = 'Normal'; }
+        else if (bmi < 30) { bmiColor = '#F39C12'; bmiLabel = 'Overweight'; }
+        else { bmiColor = '#E74C3C'; bmiLabel = 'Obese'; }
+      }
+
+      // Jitsi video call room
+      const roomName = 'vedtrim-client-' + c.id + '-' + Date.now().toString(36);
+
+      main.innerHTML = `
+        <!-- Client Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xl); flex-wrap: wrap; gap: var(--space-md);">
+          <div>
+            <h1 style="font-size: 1.6rem; margin-bottom: 4px;">${c.firstName} ${c.lastName}</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">${c.email} · ${c.phone || 'No phone'}</p>
+          </div>
+          <div style="display: flex; gap: var(--space-md); align-items: center;">
+            <button class="btn-video-call" onclick="startVideoCall('${roomName}', '${c.firstName}')">
+              <span class="pulse-dot"></span>
+              📹 Start Video Call
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Info -->
+        <div class="detail-section">
+          <h3>👤 Profile Information</h3>
+          <div class="info-grid">
+            <div class="info-item"><div class="info-label">Full Name</div><div class="info-value">${c.firstName} ${c.lastName}</div></div>
+            <div class="info-item"><div class="info-label">Email</div><div class="info-value">${c.email}</div></div>
+            <div class="info-item"><div class="info-label">Phone</div><div class="info-value">${c.phone || '—'}</div></div>
+            <div class="info-item"><div class="info-label">Gender</div><div class="info-value">${genderMap[qd.gender] || '—'}</div></div>
+            <div class="info-item"><div class="info-label">Date of Birth</div><div class="info-value">${qd.dob ? new Date(qd.dob).toLocaleDateString('en-IN', {year:'numeric',month:'long',day:'numeric'}) : '—'}</div></div>
+            <div class="info-item"><div class="info-label">Age</div><div class="info-value">${ageStr}</div></div>
+            <div class="info-item"><div class="info-label">Plan</div><div class="info-value">${planMap[c.plan] || 'No Plan'}</div></div>
+            <div class="info-item"><div class="info-label">Member Since</div><div class="info-value">${new Date(c.createdAt).toLocaleDateString('en-IN', {year:'numeric',month:'long',day:'numeric'})}</div></div>
+            <div class="info-item"><div class="info-label">Subscription Ends</div><div class="info-value">${subEnd}</div></div>
+            <div class="info-item"><div class="info-label">Quiz Completed</div><div class="info-value">${c.quizCompleted ? '✅ Yes' : '❌ Not yet'}</div></div>
+          </div>
+        </div>
+
+        ${bmi ? `
+        <!-- BMI Card -->
+        <div class="detail-section" style="text-align: center;">
+          <h3>⚖️ BMI</h3>
+          <div style="font-size: 3.5rem; font-weight: 800; color: ${bmiColor}; font-family: var(--font-heading);">${bmi}</div>
+          <div style="font-size: 1rem; font-weight: 600; color: ${bmiColor}; margin-bottom: var(--space-md);">${bmiLabel}</div>
+          <div style="background: var(--border-light); border-radius: var(--radius-xl); height: 12px; overflow: hidden;">
+            <div style="height: 100%; width: ${Math.min(Math.max((bmi/40)*100,5),100)}%; background: ${bmiColor}; border-radius: var(--radius-xl); transition: width 1s;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+            <span>Under</span><span>Normal</span><span>Over</span><span>Obese</span>
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Daily Weight Chart (always visible if data exists) -->
+        <div class="detail-section">
+          <h3>📈 Daily Weight Progress</h3>
+          ${(c.dailyWeights && c.dailyWeights.length > 0) ? `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Latest Weight</span>
+              <div id="vLatestWeight" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">—</div>
+            </div>
+            <div style="text-align: center;">
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Progress</span>
+              <div id="chartProgress" style="font-size: 1.4rem; font-weight: 800; color: var(--success);">—</div>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Goal Weight</span>
+              <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-dark);">${qd.goalWeight || '—'} kg</div>
+            </div>
+          </div>
+          <div style="width: 100%; overflow-x: auto;">
+            <svg id="vWeightChart" width="100%" height="240" viewBox="0 0 700 240" preserveAspectRatio="xMidYMid meet" style="min-width: 400px;"></svg>
+          </div>
+          <div style="display: flex; justify-content: center; gap: var(--space-xl); margin-top: var(--space-sm); font-size: 0.78rem; color: var(--text-muted);">
+            <span><span style="display:inline-block;width:12px;height:3px;background:var(--primary);margin-right:6px;vertical-align:middle;border-radius:2px;"></span>Actual Weight</span>
+            <span><span style="display:inline-block;width:12px;height:3px;background:var(--accent);margin-right:6px;vertical-align:middle;border-radius:2px;border:1px dashed var(--accent);"></span>Goal Weight</span>
+          </div>
+          ` : `<div style="text-align:center;padding:var(--space-xl);color:var(--text-muted);"><div style="font-size:2rem;margin-bottom:var(--space-sm);">📊</div><p>Client hasn't logged any daily weight yet.</p></div>`}
+        </div>
+
+        <!-- Quiz Data -->
+        ${c.quizCompleted && c.quizData ? renderQuizSection(c.quizData) : `
+        <div class="detail-section">
+          <h3>📋 Health Quiz Data</h3>
+          <div style="text-align: center; padding: var(--space-xl); color: var(--text-muted);">
+            <div style="font-size: 2rem; margin-bottom: var(--space-sm);">⏳</div>
+            <p>This client hasn't completed the health quiz yet.</p>
+          </div>
+        </div>
+        `}
+
+        <!-- Reviews Section -->
+        <div class="detail-section" id="vaidyaReviewsSection">
+          <h3>⭐ Client Reviews</h3>
+          <div id="vaidyaReviewsList" style="color:var(--text-muted);text-align:center;padding:var(--space-lg);">Loading reviews...</div>
+        </div>
+      `;
+
+      // Draw chart from REAL daily weight data
+      if (c.dailyWeights && c.dailyWeights.length > 0) {
+        drawVaidyaChart(c.dailyWeights, parseFloat(qd.goalWeight) || 60);
+      }
+
+      // Load reviews
+      loadVaidyaReviews();
+    }
+
+    // ── Load & Render Reviews for Vaidya ──
+    async function loadVaidyaReviews() {
+      try {
+        const { data: reviews } = await _sb.from('reviews').select('*').order('created_at', { ascending: false });
+        const { data: allReplies } = await _sb.from('review_replies').select('*').order('created_at', { ascending: true });
+        const replies = allReplies || [];
+
+        const container = document.getElementById('vaidyaReviewsList');
+        if (!reviews || reviews.length === 0) {
+          container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">No reviews yet.</p>';
+          return;
+        }
+
+        container.innerHTML = reviews.map(r => {
+          const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+          const date = new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+          const avatar = r.profile_pic
+            ? `<img src="${r.profile_pic}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">`
+            : `<div style="width:36px;height:36px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;">${r.user_name.split(' ').map(n=>n[0]).join('').toUpperCase()}</div>`;
+          const reviewReplies = replies.filter(rp => rp.review_id === r.id);
+          const repliesHtml = reviewReplies.map(rp => `
+            <div style="background:rgba(45,80,22,0.06);padding:10px;border-radius:var(--radius-sm);border-left:3px solid var(--primary);font-size:0.8rem;margin-top:6px;">
+              <strong style="color:var(--primary);">🛡️ ${rp.reply_by_name}:</strong> ${rp.reply_text}
+              <span style="font-size:0.65rem;color:var(--text-muted);margin-left:6px;">${new Date(rp.created_at).toLocaleDateString('en-IN')}</span>
+            </div>
+          `).join('');
+          return `
+            <div style="background:rgba(253,248,240,0.5);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                ${avatar}
+                <div style="flex:1;">
+                  <div style="font-weight:600;font-size:0.9rem;">${r.user_name}</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);">${r.user_email} · ${date}</div>
+                </div>
+                <div style="color:#f1c40f;font-size:1rem;">${stars}</div>
+                ${!r.is_visible ? '<span style="color:#e74c3c;font-size:0.7rem;font-weight:600;">🚫 HIDDEN</span>' : ''}
+              </div>
+              <p style="font-size:0.85rem;line-height:1.5;color:var(--text-secondary);margin-bottom:8px;">${r.review_text}</p>
+              ${repliesHtml}
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button onclick="vaidyaReplyReview(${r.id}, '${r.user_name.replace(/'/g, "\\'")}')" style="padding:4px 12px;border:1px solid var(--primary);background:transparent;color:var(--primary);border-radius:var(--radius-sm);cursor:pointer;font-size:0.75rem;font-weight:600;">💬 Reply</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Reviews load error:', err);
+      }
+    }
+
+    // ── Vaidya Reply (inserts into review_replies, no overwrite) ──
+    async function vaidyaReplyReview(reviewId, reviewerName) {
+      const reply = prompt('Reply to ' + reviewerName + "'s review:");
+      if (!reply || !reply.trim()) return;
+      const vaidyaSession = JSON.parse(localStorage.getItem('vedtrim_vaidya_session') || '{}');
+      const vaidyaName = vaidyaSession.name || 'Vaidya';
+      await _sb.from('review_replies').insert({
+        review_id: reviewId,
+        reply_text: reply.trim(),
+        reply_by_name: vaidyaName,
+        reply_by_type: 'vaidya'
+      });
+      loadVaidyaReviews();
+      alert('✅ Reply posted!');
+    }
+
+    // ── Render Quiz Data ──
+    function renderQuizSection(qd) {
+      const formatVal = (v) => {
+        if (!v) return '—';
+        if (Array.isArray(v)) return v.length > 0 ? v.map(x => `<span class="quiz-tag">${x}</span>`).join(' ') : '—';
+        return v.toString().charAt(0).toUpperCase() + v.toString().slice(1);
+      };
+
+      const sections = [
+        { title: '📐 Body Measurements', items: [
+          ['Height', qd.height ? qd.height + ' cm' : '—'],
+          ['Weight', qd.weight ? qd.weight + ' kg' : '—'],
+          ['Goal Weight', qd.goalWeight ? qd.goalWeight + ' kg' : '—'],
+          ['BMI', qd.bmi || '—'],
+        ]},
+        { title: '🧘 Prakriti & Agni', items: [
+          ['Body Type (Prakriti)', formatVal(qd.prakriti)],
+          ['Appetite (Agni)', formatVal(qd.agni)],
+          ['Skin Type', formatVal(qd.skin)],
+          ['Hair Type', formatVal(qd.hair)],
+        ]},
+        { title: '😴 Sleep & Lifestyle', items: [
+          ['Sleep Quality', formatVal(qd.sleep)],
+          ['Sleep Hours', formatVal(qd.sleepHours)],
+          ['Wake Up Time', formatVal(qd.wakeUp)],
+          ['Sleep Time', formatVal(qd.sleepTime)],
+          ['Activity Level', formatVal(qd.activity)],
+          ['Exercise', formatVal(qd.exercise)],
+        ]},
+        { title: '🍽️ Diet', items: [
+          ['Diet Type', formatVal(qd.diet)],
+          ['Meals Per Day', formatVal(qd.meals)],
+          ['Food Choice', formatVal(qd.foodChoice)],
+          ['Late Eating', formatVal(qd.lateEating)],
+          ['Food Habits', formatVal(qd.foodHabits)],
+        ]},
+        { title: '🧠 Mental Health', items: [
+          ['Stress Level', formatVal(qd.stress)],
+          ['Mental State', formatVal(qd.mentalState)],
+          ['Motivation', formatVal(qd.motivation)],
+          ['Mind Practices', formatVal(qd.mindPractice)],
+        ]},
+        { title: '🏥 Health History', items: [
+          ['Blood Pressure', formatVal(qd.bp)],
+          ['Heart Rate', formatVal(qd.heartRate)],
+          ['Past Treatment', formatVal(qd.pastTreatment)],
+          ['Diet History', formatVal(qd.dietHistory)],
+          ['Weight Change', formatVal(qd.weightChange)],
+          ['Conditions', formatVal(qd.conditions1)],
+          ['More Conditions', formatVal(qd.conditions2)],
+          ['Digestion', formatVal(qd.digestion)],
+          ['Digestive Issues', formatVal(qd.digestiveIssues)],
+          ['Water Intake', formatVal(qd.water)],
+          ['Symptoms', formatVal(qd.symptoms)],
+        ]},
+        { title: '🔬 Treatment & Allergies', items: [
+          ['Panchakarma', formatVal(qd.panchakarma)],
+          ['Ayurvedic History', formatVal(qd.ayurvedicHistory)],
+          ['Food Allergies', formatVal(qd.foodAllergies)],
+          ['Herb Allergies', formatVal(qd.herbAllergy)],
+          ['Medications', formatVal(qd.medications)],
+        ]},
+        { title: '📌 Preferences', items: [
+          ['Priority', formatVal(qd.priority)],
+          ['Reason', formatVal(qd.reason)],
+          ['Interests', formatVal(qd.interests)],
+          ['Important', formatVal(qd.important)],
+          ['City', formatVal(qd.city)],
+          ['Date of Birth', qd.dob || '—'],
+          ['Additional Info', formatVal(qd.additionalInfo)],
+        ]},
+      ];
+
+      return sections.map(sec => `
+        <div class="detail-section">
+          <h3>${sec.title}</h3>
+          <div class="info-grid">
+            ${sec.items.filter(([_, v]) => v !== '—').map(([label, value]) => `
+              <div class="info-item">
+                <div class="info-label">${label}</div>
+                <div class="info-value">${value}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── Draw Weight Chart from REAL data ──
+    function drawVaidyaChart(dailyWeights, goalWeight) {
+      const svg = document.getElementById('vWeightChart');
+      if (!svg || !dailyWeights || dailyWeights.length === 0) return;
+
+      const n = dailyWeights.length;
+      const weights = dailyWeights.map(w => parseFloat(w.weight));
+      const firstW = weights[0];
+      const lastW = weights[n - 1];
+      const lost = (firstW - lastW).toFixed(1);
+
+      // Update stats
+      const elLatest = document.getElementById('vLatestWeight');
+      if (elLatest) elLatest.textContent = lastW.toFixed(1) + ' kg';
+      const elProgress = document.getElementById('chartProgress');
+      if (elProgress) {
+        elProgress.textContent = (lost >= 0 ? '-' : '+') + Math.abs(lost) + ' kg';
+        elProgress.style.color = lost >= 0 ? 'var(--success)' : 'var(--error)';
+      }
+
+      const W = 700, H = 240;
+      const padL = 50, padR = 15, padT = 15, padB = 35;
+      const chartW = W - padL - padR;
+      const chartH = H - padT - padB;
+
+      const minW = Math.floor(Math.min(...weights, goalWeight) - 1);
+      const maxW = Math.ceil(Math.max(...weights) + 1);
+      const wRange = maxW - minW || 1;
+
+      const xScale = (i) => padL + (i / Math.max(n - 1, 1)) * chartW;
+      const yScale = (w) => padT + chartH - ((w - minW) / wRange) * chartH;
+
+      let svgContent = '';
+
+      // Grid lines
+      for (let i = 0; i <= 5; i++) {
+        const w = minW + (wRange / 5) * i;
+        const y = yScale(w);
+        svgContent += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#E8E0D4" stroke-width="1" stroke-dasharray="4,4"/>`;
+        svgContent += `<text x="${padL-8}" y="${y+4}" text-anchor="end" fill="#8A8A8A" font-size="10">${w.toFixed(0)}</text>`;
+      }
+
+      // X-axis date labels
+      const labelInterval = Math.max(1, Math.floor(n / 7));
+      for (let i = 0; i < n; i += labelInterval) {
+        const x = xScale(i);
+        const d = new Date(dailyWeights[i].date);
+        const label = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+        svgContent += `<text x="${x}" y="${H-5}" text-anchor="middle" fill="#8A8A8A" font-size="9">${label}</text>`;
+      }
+      if ((n-1) % labelInterval !== 0 && n > 1) {
+        const x = xScale(n-1);
+        const d = new Date(dailyWeights[n-1].date);
+        svgContent += `<text x="${x}" y="${H-5}" text-anchor="middle" fill="#8A8A8A" font-size="9">${d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</text>`;
+      }
+
+      // Goal line
+      const goalY = yScale(goalWeight);
+      svgContent += `<line x1="${padL}" y1="${goalY}" x2="${W-padR}" y2="${goalY}" stroke="#D4A843" stroke-width="2" stroke-dasharray="8,4"/>`;
+      svgContent += `<text x="${W-padR+5}" y="${goalY+4}" fill="#D4A843" font-size="9" font-weight="600">Goal</text>`;
+
+      // Area fill
+      let areaPath = `M ${xScale(0)} ${yScale(weights[0])}`;
+      weights.forEach((w, i) => { if (i > 0) areaPath += ` L ${xScale(i)} ${yScale(w)}`; });
+      areaPath += ` L ${xScale(n-1)} ${H-padB} L ${xScale(0)} ${H-padB} Z`;
+      svgContent += `<defs><linearGradient id="areaGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2D5016" stop-opacity="0.25"/><stop offset="100%" stop-color="#2D5016" stop-opacity="0.02"/></linearGradient></defs>`;
+      svgContent += `<path d="${areaPath}" fill="url(#areaGrad2)"/>`;
+
+      // Line
+      let linePath = `M ${xScale(0)} ${yScale(weights[0])}`;
+      weights.forEach((w, i) => { if (i > 0) linePath += ` L ${xScale(i)} ${yScale(w)}`; });
+      svgContent += `<path d="${linePath}" fill="none" stroke="#2D5016" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+      // Data dots
+      weights.forEach((w, i) => {
+        svgContent += `<circle cx="${xScale(i)}" cy="${yScale(w)}" r="${i === n-1 ? 5 : 3.5}" fill="#2D5016" stroke="white" stroke-width="${i === n-1 ? 3 : 2}"/>`;
+      });
+
+      // Last weight label
+      svgContent += `<text x="${xScale(n-1)}" y="${yScale(lastW)-10}" text-anchor="middle" fill="#2D5016" font-size="11" font-weight="700">${lastW.toFixed(1)} kg</text>`;
+
+      svg.innerHTML = svgContent;
+    }
+
+    // ── Video Call (Jitsi Meet) ──
+    function startVideoCall(roomName, clientName) {
+      const jitsiUrl = `https://meet.jit.si/${roomName}`;
+
+      // Show notification with link
+      const callModal = document.createElement('div');
+      callModal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInUp 0.3s ease;';
+      callModal.innerHTML = `
+        <div style="background:white;border-radius:var(--radius-lg);padding:var(--space-2xl);max-width:480px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+          <div style="font-size:3rem;margin-bottom:var(--space-md);">📹</div>
+          <h2 style="margin-bottom:var(--space-sm);">Video Call with ${clientName}</h2>
+          <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:var(--space-lg);">
+            A Jitsi Meet room will open in a new tab. Share the link below with your client so they can join.
+          </p>
+          <div style="background:var(--bg-cream);padding:12px 16px;border-radius:var(--radius-md);margin-bottom:var(--space-lg);word-break:break-all;font-size:0.8rem;font-family:monospace;text-align:left;border:1px solid var(--border-light);">
+            ${jitsiUrl}
+          </div>
+          <div style="display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap;">
+            <a href="${jitsiUrl}" target="_blank" class="btn btn-primary btn-lg" onclick="this.closest('div[style]').parentElement.remove()">
+              🚀 Join Video Call
+            </a>
+            <button class="btn btn-outline" onclick="navigator.clipboard.writeText('${jitsiUrl}');this.textContent='✅ Copied!';setTimeout(()=>this.textContent='📋 Copy Link',2000);">
+              📋 Copy Link
+            </button>
+            <button class="btn btn-outline" onclick="this.closest('div[style]').parentElement.remove()">✕ Cancel</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(callModal);
+      callModal.addEventListener('click', (e) => { if (e.target === callModal) callModal.remove(); });
+    }
+
+    // ── Initialize ──
+    loadClients();
+
+    // ── Auto-refresh every 10 seconds ──
+    setInterval(async () => {
+      try {
+        const data = await VedTrimDB.getAllUsers(null, VAIDYA_ID);
+        if (data.success) {
+          allClients = data.users;
+          renderClientList(allClients.filter(c => {
+            const q = document.getElementById('clientSearch').value.toLowerCase();
+            return !q || (c.firstName + ' ' + c.lastName).toLowerCase().includes(q) || c.email.toLowerCase().includes(q);
+          }));
+          updateStats(allClients);
+          // Re-render selected client detail if one is open
+          if (selectedClientId) {
+            const updated = allClients.find(c => c.id === selectedClientId);
+            if (updated) renderClientDetail(updated);
+          }
+        }
+      } catch (e) { /* silent */ }
+    }, 10000);
+  </script>
+</body>
+</html>

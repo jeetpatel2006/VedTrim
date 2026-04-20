@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — Start Your Journey | VedTrim</title>
+  <meta name="description" content="Create your VedTrim account and start your Ayurvedic weight loss journey. First month FREE.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card" style="max-width: 520px;">
+      <div class="auth-header">
+        <a href="index.html" class="nav-logo" style="justify-content: center; margin-bottom: var(--space-lg); font-size: 1.8rem;">
+          <div class="logo-icon" style="width: 44px; height: 44px; font-size: 1.4rem;">🌿</div>
+          Ved<span class="logo-highlight">Trim</span>
+        </a>
+        <h1>Create Your Account</h1>
+        <p>Start your Ayurvedic weight loss journey — First month FREE!</p>
+      </div>
+
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="grid grid-2" style="gap: var(--space-md);">
+          <div class="form-group">
+            <label class="form-label" for="signupFirstName">First Name <span class="required">*</span></label>
+            <input type="text" class="form-input" id="signupFirstName" placeholder="First name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signupLastName">Last Name <span class="required">*</span></label>
+            <input type="text" class="form-input" id="signupLastName" placeholder="Last name" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupPhone">Phone Number <span class="required">*</span></label>
+          <div class="input-group">
+            <span class="input-prefix">+91</span>
+            <input type="tel" class="form-input has-prefix" id="signupPhone" placeholder="98765 43210" required maxlength="10" pattern="[0-9]{10}">
+          </div>
+          <div class="form-error" id="phoneError">Please enter a valid 10-digit phone number</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupEmail">Email Address <span class="required">*</span></label>
+          <input type="email" class="form-input" id="signupEmail" placeholder="your@email.com" required>
+          <div class="form-error" id="emailError">Please enter a valid email address</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupPassword">Password <span class="required">*</span></label>
+          <div class="input-group">
+            <input type="password" class="form-input" id="signupPassword" placeholder="Create a strong password" required minlength="6">
+            <span class="input-icon toggle-password" title="Show password" role="button" tabindex="0" style="cursor: pointer; user-select: none;">👁️</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Minimum 6 characters</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupConfirmPassword">Confirm Password <span class="required">*</span></label>
+          <div class="input-group">
+            <input type="password" class="form-input" id="signupConfirmPassword" placeholder="Confirm your password" required>
+            <span class="input-icon toggle-password" title="Show password" role="button" tabindex="0" style="cursor: pointer; user-select: none;">👁️</span>
+          </div>
+          <div class="form-error" id="confirmError">Passwords do not match</div>
+        </div>
+
+        <div id="signupError" style="display: none; color: var(--error); font-size: 0.85rem; margin-bottom: var(--space-md); padding: 10px; background: rgba(231,76,60,0.08); border-radius: var(--radius-sm); text-align: center;"></div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="signupBtn">Create Account</button>
+      </form>
+
+      <!-- Quiz Button (hidden initially, shown after signup) -->
+      <div id="quizPrompt" style="display: none; text-align: center; margin-top: var(--space-xl); animation: fadeInUp 0.5s ease;">
+        <div style="background: linear-gradient(135deg, rgba(45,80,22,0.05), rgba(212,168,67,0.05)); padding: var(--space-xl); border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+          <div style="font-size: 2rem; margin-bottom: var(--space-sm);">🌿</div>
+          <h3 style="font-size: 1.1rem; margin-bottom: var(--space-sm);">Account Created Successfully!</h3>
+          <p style="font-size: 0.9rem; margin-bottom: var(--space-lg);">Take your health quiz so our Vaidyas can create your personalised treatment plan.</p>
+          <a href="quiz.html" class="btn btn-accent btn-block btn-lg" style="animation: pulse 2s infinite;">Take Your Health Quiz 📋</a>
+          <a href="dashboard.html" style="display: block; margin-top: var(--space-md); font-size: 0.85rem; color: var(--text-muted);">Skip for now →</a>
+        </div>
+      </div>
+
+      <div class="auth-footer" id="loginLink">
+        Already have an account? <a href="login.html">Log In</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    initPasswordToggle();
+
+    document.querySelectorAll('.toggle-password').forEach(toggle => {
+      toggle.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+
+    document.getElementById('signupPhone').addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g, '').slice(0, 10);
+      if (this.value.length === 10) clearFieldError(this);
+    });
+
+    document.getElementById('signupEmail').addEventListener('blur', function() {
+      if (this.value && !validateEmail(this.value)) {
+        showFieldError(this, 'Please enter a valid email address');
+      } else {
+        clearFieldError(this);
+      }
+    });
+
+    document.getElementById('signupConfirmPassword').addEventListener('input', function() {
+      const password = document.getElementById('signupPassword').value;
+      if (this.value && this.value !== password) {
+        showFieldError(this, 'Passwords do not match');
+      } else {
+        clearFieldError(this);
+      }
+    });
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const firstName = document.getElementById('signupFirstName').value.trim();
+      const lastName  = document.getElementById('signupLastName').value.trim();
+      const phone     = document.getElementById('signupPhone').value.trim();
+      const email     = document.getElementById('signupEmail').value.trim();
+      const password  = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirmPassword').value;
+      const errorDiv  = document.getElementById('signupError');
+      const btn       = document.getElementById('signupBtn');
+
+      errorDiv.style.display = 'none';
+
+      if (!firstName || !lastName || !phone || !email || !password) {
+        errorDiv.textContent = 'All fields marked with * are required.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      if (phone.length !== 10) {
+        showFieldError(document.getElementById('signupPhone'), 'Please enter a valid 10-digit phone number');
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        showFieldError(document.getElementById('signupEmail'), 'Please enter a valid email address');
+        return;
+      }
+
+      if (password.length < 6) {
+        errorDiv.textContent = 'Password must be at least 6 characters.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showFieldError(document.getElementById('signupConfirmPassword'), 'Passwords do not match');
+        return;
+      }
+
+      btn.textContent = 'Creating Account...';
+      btn.disabled = true;
+
+      // Register user in MySQL
+      const result = await VedTrimDB.register({
+        firstName,
+        lastName,
+        phone: '+91' + phone,
+        email,
+        password
+      });
+
+      if (result.success) {
+        // Auto login
+        await VedTrimDB.login(email, password);
+
+        triggerConfetti();
+        showToast('Account created successfully! 🎉', 'success');
+
+        document.getElementById('signupForm').style.display = 'none';
+        document.getElementById('loginLink').style.display = 'none';
+        document.getElementById('quizPrompt').style.display = 'block';
+      } else {
+        errorDiv.textContent = result.message;
+        errorDiv.style.display = 'block';
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+      }
+    }
+
+    // Redirect if already logged in
+    if (VedTrimDB.isLoggedIn()) {
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>
